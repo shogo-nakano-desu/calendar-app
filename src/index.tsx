@@ -1,11 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { AddScheduleDialog } from "./AddScheduleDialog";
 
-import App from "./App";
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+ReactDOM.render(<AddScheduleDialog />, document.getElementById("root"));
