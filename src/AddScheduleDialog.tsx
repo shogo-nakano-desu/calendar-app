@@ -78,7 +78,7 @@ const Input = styled.div`
   font: inherit;
   color: currentColor;
   width: 100%;
-  border: 0;
+  bord: 0;
   height: 1.1875em;
   margin: 0;
   display: block;
