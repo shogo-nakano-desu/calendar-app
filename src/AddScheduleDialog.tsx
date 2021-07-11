@@ -187,7 +187,7 @@ const SaveButton = () => {
   );
 };
 
-const CloseAddScheduleDialog = () => {
+export const CloseButton = () => {
   return (
     <div className="MuiDialogActions-root MuiDialogActions-spacing">
       <div className="src-components-AddScheduleDialog-style__closeButton--2v8XJ">
@@ -222,10 +222,8 @@ export const AddScheduleDialog = () => {
           transition: "opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         }}
       ></div>
-      {/* これが全部入りの箱の外側 */}
-      {/* <SetPositionOfDialog> */}
       <OutlineBox role="dialog">
-        <CloseAddScheduleDialog />
+        <CloseButton />
         <div className="MuiDialogContent-root">
           <AddTitleForm />
           <ShowDateForm />
@@ -234,7 +232,6 @@ export const AddScheduleDialog = () => {
         </div>
         <SaveButton />
       </OutlineBox>
-      {/* </SetPositionOfDialog> */}
       <div tabIndex={0} data-test="sentinelEnd"></div>
     </div>
   );
@@ -248,11 +245,4 @@ const OutlineBox = styled.div`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   background-color: #fff;
   width: 40%;
-`;
-
-const SetPositionOfDialog = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50%;
 `;
