@@ -3,7 +3,11 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import "./AddScheduleDialog.css";
+import { flexbox } from "styled-system";
+import { FullscreenExitTwoTone } from "@material-ui/icons";
 
 // ----------ここで渡されているデータ
 interface TestScheduleMetadata {
@@ -22,86 +26,34 @@ const testADay: TestScheduleModel = {
 };
 // ----------
 
-// "MuiInputBase-root MuiInput-root jss1000 MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth">
-// const Title = styled.div`
-//   color: rgba(0, 0, 0, 0.87);
-//   cursor: text;
-//   display: inline-flex;
-//   position: relative;
-//   font-size: 1rem;
-//   box-sizing: border-box;
-//   align-items: center;
-//   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-//   line-height: 1.1875em;
-//   position: relative;
-//   font-size: 22px;
-//   margin-bottom: 32px;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   content: "\00a0";
-//   position: absolute;
-//   transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-//   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-//   pointer-events: none;
-//   width: 100%;
-// `;
 const Title = styled.div`
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
   font-size: 22px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-`;
 
-const Input = styled.div`
-  &:before {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    content: "\00a0";
-    position: absolute;
+  &::before {
+    content: "";
     transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     border-bottom: 1px solid rgba(0, 0, 0, 0.42);
     pointer-events: none;
   }
-  $:after {
-    left: 0;
-    right: 0;
-    bottom: 0;
+  &::after {
     content: "";
-    position: absolute;
-    transform: scaleX(0);
     transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     border-bottom: 2px solid #3f51b5;
     pointer-events: none;
   }
+`;
+
+const Input = styled.input`
   font: inherit;
   color: currentColor;
   width: 100%;
-  bord: 0;
+  border: none;
   height: 1.1875em;
-  margin: 0;
-  display: block;
   padding: 6px 0 7px;
-  min-width: 0;
-  background: none;
-  box-sizing: content-box;
-  animation-name: MuiInputBase-keyframes-auto-fill-cancel;
-  -webkit-tap-highlight-color: transparent;
 `;
-
-const AddTitleForm = () => {
-  return (
-    <Title>
-      <Input
-        placeholder="タイトルと日時を追加"
-        type="text"
-        className="MuiInputBase-input MuiInput-input"
-        // valueはinput のstateを管理するようになった時に表示させるようにする
-      />
-    </Title>
-  );
-};
 
 //MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center MuiGrid-justify-xs-space-between
 const FormAndIcon = styled.div`
@@ -113,9 +65,26 @@ const FormAndIcon = styled.div`
   justify-content: space-between;
 `;
 
+const DateForm = styled(FormAndIcon)`
+  padding: 25px 0 0 0;
+`;
+
+const AddTitleForm = () => {
+  return (
+    <Title>
+      <Input
+        placeholder="タイトルと日時を追加"
+        type="text"
+        // className="MuiInputBase-input MuiInput-input"
+        // valueはinput のstateを管理するようになった時に表示させるようにする
+      />
+    </Title>
+  );
+};
+
 const ShowDateForm = () => {
   return (
-    <FormAndIcon>
+    <DateForm>
       <div className="MuiGrid-root MuiGrid-item">
         <AccessTimeIcon
           className="MuiSvgIcon-root"
@@ -132,8 +101,7 @@ const ShowDateForm = () => {
           style={{ margin: "4px 0px" }}
         >
           <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <input
-              className="MuiInputBase-input MuiInput-input"
+            <Input
               aria-invalid="false"
               readOnly
               type="text"
@@ -143,7 +111,7 @@ const ShowDateForm = () => {
           </div>
         </div>
       </div>
-    </FormAndIcon>
+    </DateForm>
   );
 };
 
@@ -165,8 +133,7 @@ const AddPlaceForm = () => {
           style={{ margin: "4px 0px" }}
         >
           <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <input
-              className="MuiInputBase-input MuiInput-input"
+            <Input
               aria-invalid="false"
               placeholder="場所を追加"
               type="text"
@@ -197,11 +164,11 @@ const AddDescriptionForm = () => {
           style={{ margin: "4px 0px" }}
         >
           <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <input
-              className="MuiInputBase-input MuiInput-input"
+            <Input
               aria-invalid="false"
               placeholder="説明を追加"
               type="text"
+              //valueの状態を持つようにする必要あり
             />
           </div>
         </div>
@@ -213,14 +180,9 @@ const AddDescriptionForm = () => {
 const SaveButton = () => {
   return (
     <div className="MuiDialogActions-root MuiDialogActions-spacing">
-      <button
-        className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary"
-        tabIndex={0}
-        type="button"
-      >
-        <span className="MuiButton-label">保存</span>
-        <span className="MuiTouchRipple-root"></span>
-      </button>
+      <Button variant="outlined" color="primary">
+        保存
+      </Button>
     </div>
   );
 };
@@ -229,15 +191,7 @@ const CloseAddScheduleDialog = () => {
   return (
     <div className="MuiDialogActions-root MuiDialogActions-spacing">
       <div className="src-components-AddScheduleDialog-style__closeButton--2v8XJ">
-        <button
-          className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
-          tabIndex={0}
-          type="button"
-          title="閉じる"
-        >
-          <span className="MuiIconButton-label"></span>
-          <span className="MuiTouchRipple-root"></span>
-        </button>
+        <HighlightOffIcon type="button" />
       </div>
     </div>
   );
@@ -247,42 +201,58 @@ export const AddScheduleDialog = () => {
   return (
     <div
       role="presentation"
-      className="MuiDialog-root"
-      style={{ position: "fixed", zIndex: 1300, inset: "0px" }}
+      style={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(128, 128, 128, 0.5)",
+        padding: 0,
+      }}
     >
       <div
-        className="MuiBackdrop-root"
         aria-hidden="true"
         style={{
-          opacity: 1,
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "rgba(0,0,0,0.5)",
+          opacity: 0.5,
           transition: "opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         }}
       ></div>
-      <div tabIndex={0} data-test="sentinelStart"></div>
-      <div
-        className="MuiDialog-container MuiDialog-scrollPaper"
-        role="none presentation"
-        tabIndex={-1}
-        style={{
-          opacity: 1,
-          transition: "opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        }}
-      >
-        <div
-          className="MuiPaper-root MuiDialog-paper MuiDialog-paperScrollPaper MuiDialog-paperWidthXs MuiDialog-paperFullWidth MuiPaper-elevation24 MuiPaper-rounded"
-          role="dialog"
-        >
-          <CloseAddScheduleDialog />
-          <div className="MuiDialogContent-root">
-            <AddTitleForm />
-            <ShowDateForm />
-            <AddPlaceForm />
-            <AddDescriptionForm />
-          </div>
-          <SaveButton />
+      {/* これが全部入りの箱の外側 */}
+      {/* <SetPositionOfDialog> */}
+      <OutlineBox role="dialog">
+        <CloseAddScheduleDialog />
+        <div className="MuiDialogContent-root">
+          <AddTitleForm />
+          <ShowDateForm />
+          <AddPlaceForm />
+          <AddDescriptionForm />
         </div>
-      </div>
+        <SaveButton />
+      </OutlineBox>
+      {/* </SetPositionOfDialog> */}
       <div tabIndex={0} data-test="sentinelEnd"></div>
     </div>
   );
 };
+
+// className="MuiPaper-root MuiDialog-paper
+// MuiDialog - paperScrollPaper MuiDialog - paperWidthXs
+// MuiDialog - paperFullWidth MuiPaper - elevation24 MuiPaper - rounded"
+const OutlineBox = styled.div`
+  color: rgba(0, 0, 0, 0.87);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  background-color: #fff;
+  width: 40%;
+`;
+
+const SetPositionOfDialog = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+`;
