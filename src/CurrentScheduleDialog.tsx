@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { CloseButton } from "./AddScheduleDialog";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RoomIcon from "@material-ui/icons/Room";

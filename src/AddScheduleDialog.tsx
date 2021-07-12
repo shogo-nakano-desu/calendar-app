@@ -1,3 +1,7 @@
+// やりたいこと
+// 1. コード全体が汚いので綺麗にする。特に、cssが外部ファイルで残っているのを消したい
+// 2. 入力フォームにもmaterial - uiがあるはずなので適用する
+
 import React from "react";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
