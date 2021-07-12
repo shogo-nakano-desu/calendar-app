@@ -3,8 +3,12 @@ import add from "date-fns/add";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import getDaysInMonth from "date-fns/getDaysInMonth";
+import getWeeksInMonth from "date-fns/getWeeksInMonth";
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { Navigation } from "./Navigation";
+import { Repeat } from "@material-ui/icons";
 
 // ----------ui作成で活用するデータ
 interface TestScheduleMetadata {
@@ -24,10 +28,12 @@ const testADay: TestScheduleModel = {
 };
 
 const weeksArray: TestScheduleModel[] = [];
-// カレンダー描画するときに使うデータ
+// カレンダー描画するときに使うデータ。Navigationでも使っている
 export const targetYear = getYear(testToday);
 export const targetMonth = getMonth(testToday) + 1;
-const daysInMonth = getDaysInMonth(new Date(targetYear, targetMonth - 1, 1));
+const renderedFirstDate = new Date(targetYear, targetMonth - 1, 1);
+const daysInMonth = getDaysInMonth(renderedFirstDate);
+const weeksInMonth = getWeeksInMonth(renderedFirstDate);
 // ----------
 
 // まずは巨大な配列を作る処理
@@ -77,6 +83,7 @@ export const CalendarApp = () => {
   return (
     <CalendarAppStyle>
       <Navigation />
+      <CalendarBoard />
     </CalendarAppStyle>
   );
 };
@@ -84,9 +91,68 @@ const CalendarAppStyle = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   background-color: rgb(255, 255, 255);
 `;
 
-const CalendarBoard = () => {};
+const CalendarBoard = () => {
+  return (
+    <BoarderStyle>
+      <CalendarBoardStyle theme={{ rows: calendarRowsCalc(weeksInMonth) }}>
+        <Schedules />
+      </CalendarBoardStyle>
+    </BoarderStyle>
+  );
+};
+const CalendarBoardStyle = styled.div`
+  background-color: rgb(255, 255, 255);
+  border-color: rgb(218, 220, 224);
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: ${({ theme }) => theme.rows};
+  grid-gap: 1px;
+`;
 
-const Schedules = () => {};
+const BoarderStyle = styled.div`
+  background-color: rgb(218, 220, 224);
+  width: 100%;
+  height: 100%;
+  margin: 8px;
+`;
+
+// calendarの行数に応じてグリッドを生成するための１frを返す
+const calendarRowsCalc = (weeksInMonth: number): string => {
+  if (weeksInMonth === 4) {
+    return "1fr 1fr 1fr 1fr";
+  } else if (weeksInMonth === 5) {
+    return "1fr 1fr 1fr 1fr 1fr";
+  } else {
+    return "1fr 1fr 1fr 1fr 1fr 1fr";
+  }
+};
+
+// 生成して並べる必要があるdivの数は7*weeksInMonth
+const lineupDivNum: number = 7 * weeksInMonth;
+const dateOfFirstDayOfCalendar = getDay(firstDayOfCalendar);
+// カレンダー上でレンダーし始めるべきweeksArrayのIndex番号
+const renderStartIndex: number =
+  differenceInCalendarDays(firstDayOfCalendar, renderedFirstDate) -
+  dateOfFirstDayOfCalendar;
+// ここから該当月分レンダーしていったら、ピッタリの数になるはず。（renderStartIndexの数字はちゃんと計算していないから前後２ぐらいずれいているかも）
+
+const renderWeeksArray = weeksArray.slice(renderStartIndex, lineupDivNum);
+
+// 空で返ってきてしまっている。ここで、該当月の前後含めた日付全部を配列として引っこ抜いてくることができていれば、カレンダーの描画がうまくいくはず。
+// ここの修正からスタート
+console.log(renderWeeksArray);
+const Schedules = () => {
+  return (
+    <>
+      {renderWeeksArray.map((day) => (
+        <div>{day.date.getDay}</div>
+      ))}
+    </>
+  );
+};
