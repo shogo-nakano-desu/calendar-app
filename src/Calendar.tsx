@@ -161,7 +161,6 @@ const Schedules = () => {
       {renderWeeksArray.map((day) => (
         <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
       ))}
-      {renderWeeksArray.map((day) => scheduleFinder)}
     </>
   );
 };
@@ -172,10 +171,12 @@ const ScheduleStyle = styled.div`
   justify-content: center;
 `;
 
-const scheduleFinder = (day: TestScheduleModel) => {
-  if (day.schedules.length >= 1) {
-    return day.schedules.map((schedule: TestScheduleMetadata) => (
-      <ScheduleStyle>{schedule.title}</ScheduleStyle>
-    ));
-  }
-};
+// いったんぼつになっている関数たち。
+// {renderWeeksArray.map((day) => scheduleFinder)}
+// const scheduleFinder = (day: TestScheduleModel) => {
+//   if (day.schedules.length >= 1) {
+//     return day.schedules.map((schedule: TestScheduleMetadata) => (
+//       <ScheduleStyle>{schedule.title}</ScheduleStyle>
+//     ));
+//   }
+// };
