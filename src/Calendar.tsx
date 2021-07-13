@@ -3,8 +3,37 @@ import add from "date-fns/add";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import getDaysInMonth from "date-fns/getDaysInMonth";
+import getWeeksInMonth from "date-fns/getWeeksInMonth";
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import getDate from "date-fns/getDate";
+import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { Navigation } from "./Navigation";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dayStyle: {
+      backgroundColor: "rgb(255, 255, 255)",
+      padding: "5px",
+      display: "flex",
+      justifyContent: "center",
+    },
+    // bar: {
+    //   backgroundColor: kleinColor,
+    // },
+    scheduleTitleStyle: {
+      backgroundColor: "rgb(33, 151, 156)",
+      color: "rgb(255, 255, 255)",
+      borderRadius: "5px",
+      margin: "1px",
+    },
+    title: {
+      flexGrow: 0.1,
+    },
+  })
+);
 
 // ----------ui作成で活用するデータ
 interface TestScheduleMetadata {
@@ -24,10 +53,12 @@ const testADay: TestScheduleModel = {
 };
 
 const weeksArray: TestScheduleModel[] = [];
-// カレンダー描画するときに使うデータ
+// カレンダー描画するときに使うデータ。Navigationでも使っている
 export const targetYear = getYear(testToday);
 export const targetMonth = getMonth(testToday) + 1;
-const daysInMonth = getDaysInMonth(new Date(targetYear, targetMonth - 1, 1));
+const renderedFirstDate = new Date(targetYear, targetMonth - 1, 1);
+const daysInMonth = getDaysInMonth(renderedFirstDate);
+const weeksInMonth = getWeeksInMonth(renderedFirstDate);
 // ----------
 
 // まずは巨大な配列を作る処理
@@ -77,6 +108,7 @@ export const CalendarApp = () => {
   return (
     <CalendarAppStyle>
       <Navigation />
+      <CalendarBoard />
     </CalendarAppStyle>
   );
 };
@@ -84,9 +116,102 @@ const CalendarAppStyle = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   background-color: rgb(255, 255, 255);
 `;
 
-const CalendarBoard = () => {};
+const CalendarBoard = () => {
+  return (
+    <BoarderStyle>
+      <CalendarGridStyle theme={{ rows: calendarRowsCalc(weeksInMonth) }}>
+        <Schedules />
+      </CalendarGridStyle>
+    </BoarderStyle>
+  );
+};
+// gridでブロックを区切るためのcss
+const CalendarGridStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: ${({ theme }) => theme.rows};
+  grid-gap: 1px;
+`;
 
-const Schedules = () => {};
+// 背景をグレーにして、上にのせる要素で被らない部分をボーダーに見せる
+// rgb(218, 220, 224)ボーダーの色れい
+const BoarderStyle = styled.div`
+  background-color: rgb(218, 220, 224);
+  width: 100%;
+  height: 100%;
+  margin: 8px;
+`;
+
+// calendarの行数に応じてグリッドを生成するための１frを返す
+const calendarRowsCalc = (weeksInMonth: number): string => {
+  if (weeksInMonth === 4) {
+    return "1fr 1fr 1fr 1fr";
+  } else if (weeksInMonth === 5) {
+    return "1fr 1fr 1fr 1fr 1fr";
+  } else {
+    return "1fr 1fr 1fr 1fr 1fr 1fr";
+  }
+};
+
+// 生成して並べる必要があるdivの数は7*weeksInMonth
+const lineupDivNum: number = 7 * weeksInMonth;
+const dateOfFirstDayOfCalendar = getDay(renderedFirstDate);
+// カレンダー上でレンダーし始めるべきweeksArrayのIndex番号
+const renderStartIndex: number =
+  differenceInCalendarDays(renderedFirstDate, firstDayOfCalendar) -
+  dateOfFirstDayOfCalendar;
+// ここから該当月分レンダーしていったら、ピッタリの数になる
+const renderWeeksArray = weeksArray.slice(
+  renderStartIndex,
+  renderStartIndex + lineupDivNum
+);
+
+// 予定があるかないか、あるとしたら１個だけなのか複数あるのか
+//（つまり、ifで予定のあるなしを判定して、あったらmapで展開していく）ロジックは後からかく
+console.log(renderWeeksArray);
+
+const Schedules = () => {
+  const classes = useStyles();
+  return (
+    <>
+      {renderWeeksArray.map((day) =>
+        // <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
+        {
+          if (day.schedules.length >= 1) {
+            return (
+              // day.schedules.map((schedule: TestScheduleMetadata) => (
+              <ScheduleExistBoxStyle>
+                <Typography className={classes.dayStyle}>
+                  {getDate(day.date)}
+                </Typography>
+                {day.schedules.map((schedule: TestScheduleMetadata) => (
+                  <Typography className={classes.scheduleTitleStyle}>
+                    {schedule.title}
+                  </Typography>
+                ))}
+              </ScheduleExistBoxStyle>
+            );
+          } else {
+            return (
+              <Typography className={classes.dayStyle}>
+                {getDate(day.date)}
+              </Typography>
+            );
+          }
+        }
+      )}
+    </>
+  );
+};
+
+const ScheduleExistBoxStyle = styled.div`
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+`;

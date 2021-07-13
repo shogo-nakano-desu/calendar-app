@@ -8,13 +8,17 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { targetYear, targetMonth } from "./Calendar";
+
+const kleinColor = "rgb(17, 30, 51)";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      backgroundColor: "rgb(255,255,255)",
+      height: 64,
     },
     bar: {
-      backgroundColor: "rgb(17,30,51)",
+      backgroundColor: kleinColor,
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -28,46 +32,44 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Navigation = () => {
   const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar className={classes.bar}>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-          >
-            <MenuIcon />
-          </IconButton>
-          <CalendarTodayIcon />
-          <Typography variant="h6" className={classes.title}>
-            カレンダー
-          </Typography>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            {targetYear}年{targetMonth}月
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <AppBar position="static" className={classes.root}>
+      <Toolbar className={classes.bar}>
+        <IconButton
+          edge="start"
+          className={classes.menuButton}
+          color="inherit"
+          aria-label="menu"
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+        >
+          <MenuIcon />
+        </IconButton>
+        <CalendarTodayIcon />
+        <Typography variant="h6" className={classes.title}>
+          カレンダー
+        </Typography>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+        <Typography variant="h6" className={classes.title}>
+          {targetYear}年{targetMonth}月
+        </Typography>
+      </Toolbar>
+    </AppBar>
   );
 };
