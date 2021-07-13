@@ -159,17 +159,18 @@ const Schedules = () => {
         // <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
         {
           if (day.schedules.length >= 1) {
-            console.log("ifのなか処理している");
-            return day.schedules.map((schedule: TestScheduleMetadata) => (
-              <div style={{ padding: "5px" }}>
+            return (
+              // day.schedules.map((schedule: TestScheduleMetadata) => (
+              <div>
                 <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
-                <ScheduleStyle>{schedule.title}</ScheduleStyle>
+                {day.schedules.map((schedule: TestScheduleMetadata) => (
+                  <ScheduleStyle>{schedule.title}</ScheduleStyle>
+                ))}
               </div>
-            ));
+            );
           } else {
             return <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>;
           }
-          console.log("無名関数動いている");
         }
       )}
     </>
