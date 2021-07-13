@@ -9,7 +9,31 @@ import getDate from "date-fns/getDate";
 import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { Navigation } from "./Navigation";
-import { Repeat } from "@material-ui/icons";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dayStyle: {
+      backgroundColor: "rgb(255, 255, 255)",
+      padding: "5px",
+      display: "flex",
+      justifyContent: "center",
+    },
+    // bar: {
+    //   backgroundColor: kleinColor,
+    // },
+    scheduleTitleStyle: {
+      backgroundColor: "rgb(33, 151, 156)",
+      color: "rgb(255, 255, 255)",
+      borderRadius: "5px",
+      margin: "1px",
+    },
+    title: {
+      flexGrow: 0.1,
+    },
+  })
+);
 
 // ----------ui作成で活用するデータ
 interface TestScheduleMetadata {
@@ -153,6 +177,7 @@ const renderWeeksArray = weeksArray.slice(
 console.log(renderWeeksArray);
 
 const Schedules = () => {
+  const classes = useStyles();
   return (
     <>
       {renderWeeksArray.map((day) =>
@@ -161,35 +186,32 @@ const Schedules = () => {
           if (day.schedules.length >= 1) {
             return (
               // day.schedules.map((schedule: TestScheduleMetadata) => (
-              <div>
-                <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
+              <ScheduleExistBoxStyle>
+                <Typography className={classes.dayStyle}>
+                  {getDate(day.date)}
+                </Typography>
                 {day.schedules.map((schedule: TestScheduleMetadata) => (
-                  <ScheduleStyle>{schedule.title}</ScheduleStyle>
+                  <Typography className={classes.scheduleTitleStyle}>
+                    {schedule.title}
+                  </Typography>
                 ))}
-              </div>
+              </ScheduleExistBoxStyle>
             );
           } else {
-            return <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>;
+            return (
+              <Typography className={classes.dayStyle}>
+                {getDate(day.date)}
+              </Typography>
+            );
           }
         }
       )}
     </>
   );
 };
-const ScheduleStyle = styled.div`
-  background-color: rgb(255, 255, 255);
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-`;
 
-// いったんぼつになっている関数たち。
-// Scheduleのなかに書いていたもの{renderWeeksArray.map((day) => scheduleFinder)}
-//
-// const scheduleFinder = (day: TestScheduleModel) => {
-//   if (day.schedules.length >= 1) {
-//     return day.schedules.map((schedule: TestScheduleMetadata) => (
-//       <ScheduleStyle>{schedule.title}</ScheduleStyle>
-//     ));
-//   }
-// };
+const ScheduleExistBoxStyle = styled.div`
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  height: 100%;
+`;
