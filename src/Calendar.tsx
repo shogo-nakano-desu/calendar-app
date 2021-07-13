@@ -5,6 +5,7 @@ import getMonth from "date-fns/getMonth";
 import getDaysInMonth from "date-fns/getDaysInMonth";
 import getWeeksInMonth from "date-fns/getWeeksInMonth";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import getDate from "date-fns/getDate";
 import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { Navigation } from "./Navigation";
@@ -98,15 +99,14 @@ const CalendarAppStyle = styled.div`
 const CalendarBoard = () => {
   return (
     <BoarderStyle>
-      <CalendarBoardStyle theme={{ rows: calendarRowsCalc(weeksInMonth) }}>
+      <CalendarGridStyle theme={{ rows: calendarRowsCalc(weeksInMonth) }}>
         <Schedules />
-      </CalendarBoardStyle>
+      </CalendarGridStyle>
     </BoarderStyle>
   );
 };
-const CalendarBoardStyle = styled.div`
-  background-color: rgb(255, 255, 255);
-  border-color: rgb(218, 220, 224);
+// gridでブロックを区切るためのcss
+const CalendarGridStyle = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
@@ -115,6 +115,8 @@ const CalendarBoardStyle = styled.div`
   grid-gap: 1px;
 `;
 
+// 背景をグレーにして、上にのせる要素で被らない部分をボーダーに見せる
+// rgb(218, 220, 224)ボーダーの色れい
 const BoarderStyle = styled.div`
   background-color: rgb(218, 220, 224);
   width: 100%;
@@ -135,24 +137,45 @@ const calendarRowsCalc = (weeksInMonth: number): string => {
 
 // 生成して並べる必要があるdivの数は7*weeksInMonth
 const lineupDivNum: number = 7 * weeksInMonth;
-const dateOfFirstDayOfCalendar = getDay(firstDayOfCalendar);
+const dateOfFirstDayOfCalendar = getDay(renderedFirstDate);
 // カレンダー上でレンダーし始めるべきweeksArrayのIndex番号
 const renderStartIndex: number =
-  differenceInCalendarDays(firstDayOfCalendar, renderedFirstDate) -
+  differenceInCalendarDays(renderedFirstDate, firstDayOfCalendar) -
   dateOfFirstDayOfCalendar;
 // ここから該当月分レンダーしていったら、ピッタリの数になるはず。（renderStartIndexの数字はちゃんと計算していないから前後２ぐらいずれいているかも）
 
-const renderWeeksArray = weeksArray.slice(renderStartIndex, lineupDivNum);
+console.log(renderStartIndex);
+console.log(lineupDivNum);
 
-// 空で返ってきてしまっている。ここで、該当月の前後含めた日付全部を配列として引っこ抜いてくることができていれば、カレンダーの描画がうまくいくはず。
-// ここの修正からスタート
+const renderWeeksArray = weeksArray.slice(
+  renderStartIndex,
+  renderStartIndex + lineupDivNum
+);
+
+// 予定があるかないか、あるとしたら１個だけなのか複数あるのか
+//（つまり、ifで予定のあるなしを判定して、あったらmapで展開していく）ロジックは後からかく
 console.log(renderWeeksArray);
 const Schedules = () => {
   return (
     <>
       {renderWeeksArray.map((day) => (
-        <div>{day.date.getDay}</div>
+        <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
       ))}
+      {renderWeeksArray.map((day) => scheduleFinder)}
     </>
   );
+};
+const ScheduleStyle = styled.div`
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+`;
+
+const scheduleFinder = (day: TestScheduleModel) => {
+  if (day.schedules.length >= 1) {
+    return day.schedules.map((schedule: TestScheduleMetadata) => (
+      <ScheduleStyle>{schedule.title}</ScheduleStyle>
+    ));
+  }
 };
