@@ -142,11 +142,7 @@ const dateOfFirstDayOfCalendar = getDay(renderedFirstDate);
 const renderStartIndex: number =
   differenceInCalendarDays(renderedFirstDate, firstDayOfCalendar) -
   dateOfFirstDayOfCalendar;
-// ここから該当月分レンダーしていったら、ピッタリの数になるはず。（renderStartIndexの数字はちゃんと計算していないから前後２ぐらいずれいているかも）
-
-console.log(renderStartIndex);
-console.log(lineupDivNum);
-
+// ここから該当月分レンダーしていったら、ピッタリの数になる
 const renderWeeksArray = weeksArray.slice(
   renderStartIndex,
   renderStartIndex + lineupDivNum
@@ -155,12 +151,27 @@ const renderWeeksArray = weeksArray.slice(
 // 予定があるかないか、あるとしたら１個だけなのか複数あるのか
 //（つまり、ifで予定のあるなしを判定して、あったらmapで展開していく）ロジックは後からかく
 console.log(renderWeeksArray);
+
 const Schedules = () => {
   return (
     <>
-      {renderWeeksArray.map((day) => (
-        <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
-      ))}
+      {renderWeeksArray.map((day) =>
+        // <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
+        {
+          if (day.schedules.length >= 1) {
+            console.log("ifのなか処理している");
+            return day.schedules.map((schedule: TestScheduleMetadata) => (
+              <div style={{ padding: "5px" }}>
+                <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
+                <ScheduleStyle>{schedule.title}</ScheduleStyle>
+              </div>
+            ));
+          } else {
+            return <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>;
+          }
+          console.log("無名関数動いている");
+        }
+      )}
     </>
   );
 };
@@ -172,7 +183,8 @@ const ScheduleStyle = styled.div`
 `;
 
 // いったんぼつになっている関数たち。
-// {renderWeeksArray.map((day) => scheduleFinder)}
+// Scheduleのなかに書いていたもの{renderWeeksArray.map((day) => scheduleFinder)}
+//
 // const scheduleFinder = (day: TestScheduleModel) => {
 //   if (day.schedules.length >= 1) {
 //     return day.schedules.map((schedule: TestScheduleMetadata) => (
