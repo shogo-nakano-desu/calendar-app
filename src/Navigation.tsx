@@ -7,29 +7,36 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { targetYear, targetMonth } from "./Calendar";
+import getYear from "date-fns/getYear";
+import getMonth from "date-fns/getMonth";
+import React, { useState } from "react";
 
-const kleinColor = "rgb(17, 30, 51)";
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-      backgroundColor: "rgb(255,255,255)",
-      height: 64,
-    },
-    bar: {
-      backgroundColor: kleinColor,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 0.1,
-    },
-  })
-);
+interface Props {
+  targetYear: number;
+  targetMonth: number;
+  setTargetYear: React.Dispatch<React.SetStateAction<number>>;
+  setTargetMonth: React.Dispatch<React.SetStateAction<number>>;
+}
 
-export const Navigation = () => {
+export const Navigation = (props: Props) => {
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      root: {
+        flexGrow: 1,
+        backgroundColor: "rgb(255,255,255)",
+        height: 64,
+      },
+      bar: {
+        backgroundColor: "rgb(17, 30, 51)", // Kleinの濃いネイビー
+      },
+      menuButton: {
+        marginRight: theme.spacing(2),
+      },
+      title: {
+        flexGrow: 0.1,
+      },
+    })
+  );
   const classes = useStyles();
   return (
     <AppBar position="static" className={classes.root}>
@@ -55,7 +62,16 @@ export const Navigation = () => {
           aria-controls="simple-menu"
           aria-haspopup="true"
         >
-          <ArrowBackIosIcon />
+          <ArrowBackIosIcon
+            onClick={() => {
+              if (props.targetMonth === 1) {
+                props.setTargetMonth(12);
+                props.setTargetYear(props.targetYear - 1);
+              } else {
+                props.setTargetMonth(props.targetMonth - 1);
+              }
+            }}
+          />
         </IconButton>
         <IconButton
           edge="start"
@@ -64,10 +80,19 @@ export const Navigation = () => {
           aria-controls="simple-menu"
           aria-haspopup="true"
         >
-          <ArrowForwardIosIcon />
+          <ArrowForwardIosIcon
+            onClick={() => {
+              if (props.targetMonth === 12) {
+                props.setTargetMonth(1);
+                props.setTargetYear(props.targetYear + 1);
+              } else {
+                props.setTargetMonth(props.targetMonth + 1);
+              }
+            }}
+          />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          {targetYear}年{targetMonth}月
+          {props.targetYear}年{props.targetMonth}月
         </Typography>
       </Toolbar>
     </AppBar>
