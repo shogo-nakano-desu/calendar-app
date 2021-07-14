@@ -10,7 +10,9 @@ import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
 import { Navigation } from "./Navigation";
+import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
 
 // 予定の持たせ方の型定義
@@ -74,6 +76,8 @@ interface Props4CalendarBoard {
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
   handleClickOpen: () => void;
+  open: boolean;
+  handleClose: () => void;
 }
 
 interface Props4Schedule {
@@ -82,6 +86,8 @@ interface Props4Schedule {
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
   handleClickOpen: () => void;
+  open: boolean;
+  handleClose: () => void;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -110,6 +116,8 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
           weeksArray={props.weeksArray}
           setWeeksArray={props.setWeeksArray}
           handleClickOpen={props.handleClickOpen}
+          open={props.open}
+          handleClose={props.handleClose}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -191,6 +199,7 @@ const Schedules = (props: Props4Schedule) => {
                 <Day2ButtonStyle onClick={props.handleClickOpen}>
                   {getDate(day.date)}
                 </Day2ButtonStyle>
+
                 {day.schedules.map((schedule: ScheduleMetadata) => (
                   <Typography className={classes.scheduleTitleStyle}>
                     {schedule.title}
@@ -199,7 +208,11 @@ const Schedules = (props: Props4Schedule) => {
               </ScheduleExistBoxStyle>
             );
           } else {
-            return <Day2ButtonStyle>{getDate(day.date)}</Day2ButtonStyle>;
+            return (
+              <Day2ButtonStyle onClick={props.handleClickOpen}>
+                {getDate(day.date)}
+              </Day2ButtonStyle>
+            );
           }
         }
       )}
@@ -262,7 +275,10 @@ export const CalendarApp = () => {
         weeksArray={weeksArray}
         setWeeksArray={setWeeksArray}
         handleClickOpen={handleClickOpen}
+        open={open}
+        handleClose={handleClose}
       />
+      <AddScheduleDialog open={open} handleClose={handleClose} />
     </CalendarAppStyle>
   );
 };

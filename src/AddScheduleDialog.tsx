@@ -9,7 +9,11 @@ import NotesIcon from "@material-ui/icons/Notes";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import "./AddScheduleDialog.css";
+import Dialog from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { flex, maxHeight, maxWidth } from "styled-system";
+import { max } from "date-fns/esm";
 
 // ----------ここで渡されているデータ
 interface TestScheduleMetadata {
@@ -28,48 +32,42 @@ const testADay: TestScheduleModel = {
 };
 // ----------
 
-const Title = styled.div`
-  width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-  font-size: 22px;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-
-  &::before {
-    content: "";
-    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-    pointer-events: none;
-  }
-  &::after {
-    content: "";
-    transition: transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-    border-bottom: 2px solid #3f51b5;
-    pointer-events: none;
-  }
-`;
-
-const Input = styled.input`
-  font: inherit;
-  color: currentColor;
-  width: 100%;
-  border: none;
-  height: 1.1875em;
-  padding: 6px 0 7px;
-`;
-
-//MuiGrid-container MuiGrid-spacing-xs-1 MuiGrid-align-items-xs-center MuiGrid-justify-xs-space-between
-const FormAndIcon = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const DateForm = styled(FormAndIcon)`
-  padding: 25px 0 0 0;
-`;
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "80%",
+      maxWidth: "500px",
+    },
+    paperScrollPaper: {
+      maxHeight: "300px",
+      height: "60%",
+    },
+    titleForm: {
+      width: "100%",
+      marginLeft: "10px",
+      marginRight: "10px",
+      display: "flex",
+      justifyContent: "center",
+      fontSize: "20px",
+    },
+    titleField: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    formField: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    resize: {
+      fontSize: 24,
+    },
+  })
+);
 
 interface Props4AddTitleForm {
   titleForm: string;
@@ -77,50 +75,35 @@ interface Props4AddTitleForm {
 }
 
 const AddTitleForm = (props: Props4AddTitleForm) => {
+  const classes = useStyles();
   return (
-    <Title>
-      <Input
-        placeholder="タイトルと日時を追加"
-        type="text"
+    <form className={classes.titleForm} noValidate autoComplete="off">
+      <TextField
+        InputProps={{
+          classes: { input: classes.resize },
+        }}
+        className={classes.titleField}
         value={props.titleForm}
         onChange={props.titleHandleChange}
+        placeholder=" タイトルを追加"
         // className="MuiInputBase-input MuiInput-input"
         // valueはinput のstateを管理するようになった時に表示させるようにする
       />
-    </Title>
+    </form>
   );
 };
 
 const ShowDateForm = () => {
+  const classes = useStyles();
   return (
-    <DateForm>
-      <div className="MuiGrid-root MuiGrid-item">
-        <AccessTimeIcon
-          className="MuiSvgIcon-root"
-          focusable="false"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          role="presentation"
-        />
-      </div>
-      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-10">
-        {/* format='YYYY年M月D日'を本当は↓のdivに入れたいのだができなかったのでいったん放置 */}
-        <div
-          className="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
-          style={{ margin: "4px 0px" }}
-        >
-          <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <Input
-              aria-invalid="false"
-              readOnly
-              type="text"
-              // valueの値は選んだ日付に応じて変わるようにする必要あり
-              value="2021年7月10日"
-            />
-          </div>
-        </div>
-      </div>
-    </DateForm>
+    <IconAndForm>
+      <IconStyle>
+        <AccessTimeIcon />
+      </IconStyle>
+      <FormStyle>
+        <TextField className={classes.formField} placeholder="2021年7月15日" />
+      </FormStyle>
+    </IconAndForm>
   );
 };
 
@@ -130,35 +113,22 @@ interface Props4AddPlaceForm {
 }
 
 const AddPlaceForm = (props: Props4AddPlaceForm) => {
+  const classes = useStyles();
   return (
-    <FormAndIcon>
-      <div className="MuiGrid-root MuiGrid-item">
-        <PlaceIcon
-          className="MuiSvgIcon-root"
-          focusable="false"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          role="presentation"
+    <IconAndForm>
+      <IconStyle>
+        <PlaceIcon />
+      </IconStyle>
+      <FormStyle>
+        <TextField
+          className={classes.formField}
+          placeholder="場所を追加"
+          value={props.placeForm}
+          onChange={props.placeHandleChange}
+          // valueは状態をもつようにしてからおくようにする。
         />
-      </div>
-      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-10">
-        <div
-          className="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
-          style={{ margin: "4px 0px" }}
-        >
-          <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <Input
-              aria-invalid="false"
-              placeholder="場所を追加"
-              type="text"
-              value={props.placeForm}
-              onChange={props.placeHandleChange}
-              // valueは状態をもつようにしてからおくようにする。
-            />
-          </div>
-        </div>
-      </div>
-    </FormAndIcon>
+      </FormStyle>
+    </IconAndForm>
   );
 };
 
@@ -167,62 +137,53 @@ interface Props4AddDescriptionForm {
   descriptionHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const AddDescriptionForm = (props: Props4AddDescriptionForm) => {
+  const classes = useStyles();
   return (
-    <FormAndIcon>
-      <div className="MuiGrid-root MuiGrid-item">
-        <NotesIcon
-          className="MuiSvgIcon-root"
-          focusable="false"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          role="presentation"
+    <IconAndForm>
+      <IconStyle>
+        <NotesIcon />
+      </IconStyle>
+      <FormStyle>
+        <TextField
+          className={classes.formField}
+          placeholder="説明を追加"
+          value={props.descriptionForm}
+          onChange={props.descriptionHandleChange}
+          //valueの状態を持つようにする必要あり
         />
-      </div>
-      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-10">
-        <div
-          className="MuiFormControl-root MuiTextField-root MuiFormControl-fullWidth"
-          style={{ margin: "4px 0px" }}
-        >
-          <div className="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-fullWidth MuiInput-fullWidth MuiInputBase-formControl MuiInput-formControl">
-            <Input
-              aria-invalid="false"
-              placeholder="説明を追加"
-              type="text"
-              value={props.descriptionForm}
-              onChange={props.descriptionHandleChange}
-              //valueの状態を持つようにする必要あり
-            />
-          </div>
-        </div>
-      </div>
-    </FormAndIcon>
+      </FormStyle>
+    </IconAndForm>
   );
 };
 
 const SaveButton = () => {
   return (
-    <div className="MuiDialogActions-root MuiDialogActions-spacing">
+    <SaveButtonStyle>
       <Button variant="outlined" color="primary">
         保存
       </Button>
-    </div>
+    </SaveButtonStyle>
   );
 };
 
-export const CloseButton = () => {
-  return (
-    <div className="MuiDialogActions-root MuiDialogActions-spacing">
-      <div className="src-components-AddScheduleDialog-style__closeButton--2v8XJ">
-        <HighlightOffIcon type="button" />
-      </div>
-    </div>
-  );
-};
+const SaveButtonStyle = styled.div`
+  display: flex;
+  height: 15%;
+  justify-content: flex-end;
+  margin: 5px;
+`;
 
-export const AddScheduleDialog = () => {
+interface Props4AddScheduleDialog {
+  open: boolean;
+  handleClose: () => void;
+}
+
+export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
   const [titleForm, setTitleForm] = useState("");
   const [placeForm, setPlaceForm] = useState("");
   const [descriptionForm, setDescriptionForm] = useState("");
+
+  const classes = useStyles();
 
   const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleForm(e.target.value);
@@ -237,59 +198,87 @@ export const AddScheduleDialog = () => {
   };
 
   return (
-    <div
-      role="presentation"
-      style={{
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(128, 128, 128, 0.5)",
-        padding: 0,
-      }}
-    >
-      <div
-        aria-hidden="true"
+    <Position>
+      <Dialog
+        classes={{
+          container: classes.container,
+          paperScrollPaper: classes.paperScrollPaper,
+        }}
+        open={props.open}
+        onClose={props.handleClose}
+        fullWidth
+        maxWidth="xl"
         style={{
-          height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          opacity: 0.5,
-          transition: "opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         }}
-      ></div>
-      <OutlineBox role="dialog">
-        <CloseButton />
-        <div className="MuiDialogContent-root">
+        // style={{
+        //   height: "100%",
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        //   backgroundColor: "rgba(128, 128, 128, 0.5)",
+        //   padding: 0,
+        // }}
+      >
+        <CloseIconSet>
+          <HighlightOffIcon type="button" />
+        </CloseIconSet>
+        <TitleSet>
           <AddTitleForm
             titleForm={titleForm}
             titleHandleChange={titleHandleChange}
           />
-          <ShowDateForm />
-          <AddPlaceForm
-            placeForm={placeForm}
-            placeHandleChange={placeHandleChange}
-          />
-          <AddDescriptionForm
-            descriptionForm={descriptionForm}
-            descriptionHandleChange={descriptionHandleChange}
-          />
-        </div>
+        </TitleSet>
+        <ShowDateForm />
+        <AddPlaceForm
+          placeForm={placeForm}
+          placeHandleChange={placeHandleChange}
+        />
+        <AddDescriptionForm
+          descriptionForm={descriptionForm}
+          descriptionHandleChange={descriptionHandleChange}
+        />
         <SaveButton />
-      </OutlineBox>
-      <div tabIndex={0} data-test="sentinelEnd"></div>
-    </div>
+      </Dialog>
+    </Position>
   );
 };
 
-// className="MuiPaper-root MuiDialog-paper
-// MuiDialog - paperScrollPaper MuiDialog - paperWidthXs
-// MuiDialog - paperFullWidth MuiPaper - elevation24 MuiPaper - rounded"
-const OutlineBox = styled.div`
-  color: rgba(0, 0, 0, 0.87);
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  background-color: #fff;
-  width: 40%;
+const Position = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CloseIconSet = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px;
+  height: 15%;
+`;
+
+const TitleSet = styled.div`
+  display: flex;
+  margin: 0px 10px 10px 10px;
+  height: 25%;
+  align-items: flex-start;
+`;
+
+const IconAndForm = styled.div`
+  display: flex;
+  height: 15%;
+  width: 100%;
+`;
+const IconStyle = styled.div`
+  margin: 0px 10px 0px 10px;
+  display: flex;
+  align-items: center;
+`;
+
+const FormStyle = styled.div`
+  margin: 0px 20px 0px 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
