@@ -2,7 +2,7 @@
 // 1. コード全体が汚いので綺麗にする。特に、cssが外部ファイルで残っているのを消したい
 // 2. 入力フォームにもmaterial - uiがあるはずなので適用する
 
-import React from "react";
+import React, { useState } from "react";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -10,8 +10,6 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import "./AddScheduleDialog.css";
-import { flexbox } from "styled-system";
-import { FullscreenExitTwoTone } from "@material-ui/icons";
 
 // ----------ここで渡されているデータ
 interface TestScheduleMetadata {
@@ -73,12 +71,19 @@ const DateForm = styled(FormAndIcon)`
   padding: 25px 0 0 0;
 `;
 
-const AddTitleForm = () => {
+interface Props4AddTitleForm {
+  titleForm: string;
+  titleHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const AddTitleForm = (props: Props4AddTitleForm) => {
   return (
     <Title>
       <Input
         placeholder="タイトルと日時を追加"
         type="text"
+        value={props.titleForm}
+        onChange={props.titleHandleChange}
         // className="MuiInputBase-input MuiInput-input"
         // valueはinput のstateを管理するようになった時に表示させるようにする
       />
@@ -119,7 +124,12 @@ const ShowDateForm = () => {
   );
 };
 
-const AddPlaceForm = () => {
+interface Props4AddPlaceForm {
+  placeForm: string;
+  placeHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const AddPlaceForm = (props: Props4AddPlaceForm) => {
   return (
     <FormAndIcon>
       <div className="MuiGrid-root MuiGrid-item">
@@ -141,6 +151,8 @@ const AddPlaceForm = () => {
               aria-invalid="false"
               placeholder="場所を追加"
               type="text"
+              value={props.placeForm}
+              onChange={props.placeHandleChange}
               // valueは状態をもつようにしてからおくようにする。
             />
           </div>
@@ -150,7 +162,11 @@ const AddPlaceForm = () => {
   );
 };
 
-const AddDescriptionForm = () => {
+interface Props4AddDescriptionForm {
+  descriptionForm: string;
+  descriptionHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+const AddDescriptionForm = (props: Props4AddDescriptionForm) => {
   return (
     <FormAndIcon>
       <div className="MuiGrid-root MuiGrid-item">
@@ -172,6 +188,8 @@ const AddDescriptionForm = () => {
               aria-invalid="false"
               placeholder="説明を追加"
               type="text"
+              value={props.descriptionForm}
+              onChange={props.descriptionHandleChange}
               //valueの状態を持つようにする必要あり
             />
           </div>
@@ -202,6 +220,22 @@ export const CloseButton = () => {
 };
 
 export const AddScheduleDialog = () => {
+  const [titleForm, setTitleForm] = useState("");
+  const [placeForm, setPlaceForm] = useState("");
+  const [descriptionForm, setDescriptionForm] = useState("");
+
+  const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleForm(e.target.value);
+  };
+
+  const placeHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceForm(e.target.value);
+  };
+
+  const descriptionHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescriptionForm(e.target.value);
+  };
+
   return (
     <div
       role="presentation"
@@ -229,10 +263,19 @@ export const AddScheduleDialog = () => {
       <OutlineBox role="dialog">
         <CloseButton />
         <div className="MuiDialogContent-root">
-          <AddTitleForm />
+          <AddTitleForm
+            titleForm={titleForm}
+            titleHandleChange={titleHandleChange}
+          />
           <ShowDateForm />
-          <AddPlaceForm />
-          <AddDescriptionForm />
+          <AddPlaceForm
+            placeForm={placeForm}
+            placeHandleChange={placeHandleChange}
+          />
+          <AddDescriptionForm
+            descriptionForm={descriptionForm}
+            descriptionHandleChange={descriptionHandleChange}
+          />
         </div>
         <SaveButton />
       </OutlineBox>
