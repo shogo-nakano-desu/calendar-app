@@ -4,4 +4,4 @@ import { AddScheduleDialog } from "./AddScheduleDialog";
 import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
 import { CalendarApp } from "./Calendar";
 
-ReactDOM.render(<AddScheduleDialog />, document.getElementById("root"));
+ReactDOM.render(<CalendarApp />, document.getElementById("root"));

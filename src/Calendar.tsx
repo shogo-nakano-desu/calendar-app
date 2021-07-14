@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { Navigation } from "./Navigation";
+import "./Calendar.css";
 
 // 予定の持たせ方の型定義
 interface ScheduleMetadata {
@@ -72,6 +73,7 @@ interface Props4CalendarBoard {
   targetMonth: number;
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
+  handleClickOpen: () => void;
 }
 
 interface Props4Schedule {
@@ -79,6 +81,7 @@ interface Props4Schedule {
   weeksInMonth: number;
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
+  handleClickOpen: () => void;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -106,6 +109,7 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
           weeksInMonth={weeksInMonth}
           weeksArray={props.weeksArray}
           setWeeksArray={props.setWeeksArray}
+          handleClickOpen={props.handleClickOpen}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -136,6 +140,11 @@ const Schedules = (props: Props4Schedule) => {
         padding: "5px",
         display: "flex",
         justifyContent: "center",
+        fontSize: "1rem",
+        fontFamily: "Roboto Helvetica Arial sans-serif",
+        fontWeight: 400,
+        lineHeight: 1.5,
+        letterSpacing: "0.00938em",
       },
       scheduleTitleStyle: {
         backgroundColor: "rgb(33, 151, 156)",
@@ -179,9 +188,9 @@ const Schedules = (props: Props4Schedule) => {
             return (
               // day.schedules.map((schedule: ScheduleMetadata) => (
               <ScheduleExistBoxStyle>
-                <Typography className={classes.dayStyle}>
+                <Day2ButtonStyle onClick={props.handleClickOpen}>
                   {getDate(day.date)}
-                </Typography>
+                </Day2ButtonStyle>
                 {day.schedules.map((schedule: ScheduleMetadata) => (
                   <Typography className={classes.scheduleTitleStyle}>
                     {schedule.title}
@@ -190,11 +199,7 @@ const Schedules = (props: Props4Schedule) => {
               </ScheduleExistBoxStyle>
             );
           } else {
-            return (
-              <Typography className={classes.dayStyle}>
-                {getDate(day.date)}
-              </Typography>
-            );
+            return <Day2ButtonStyle>{getDate(day.date)}</Day2ButtonStyle>;
           }
         }
       )}
@@ -215,11 +220,32 @@ const CalendarAppStyle = styled.div`
   background-color: rgb(255, 255, 255);
 `;
 
+const Day2ButtonStyle = styled.button`
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  border-color: rgb(255, 255, 255);
+`;
+
 export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
   const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
   const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   // const weeksArray: ScheduleModel[] = [];
   return (
@@ -235,6 +261,7 @@ export const CalendarApp = () => {
         targetMonth={targetMonth}
         weeksArray={weeksArray}
         setWeeksArray={setWeeksArray}
+        handleClickOpen={handleClickOpen}
       />
     </CalendarAppStyle>
   );
