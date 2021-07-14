@@ -11,24 +11,6 @@ import styled from "styled-components";
 import { Navigation } from "./Navigation";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { JsxEmit } from "typescript";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    dayStyle: {
-      backgroundColor: "rgb(255, 255, 255)",
-      padding: "5px",
-      display: "flex",
-      justifyContent: "center",
-    },
-    scheduleTitleStyle: {
-      backgroundColor: "rgb(33, 151, 156)",
-      color: "rgb(255, 255, 255)",
-      borderRadius: "5px",
-      margin: "1px",
-    },
-  })
-);
 
 // 予定の持たせ方の型定義
 interface ScheduleMetadata {
@@ -41,14 +23,10 @@ interface ScheduleModel<T = ScheduleMetadata> {
   schedules: Array<T>;
 }
 
-const today: Date = new Date();
-const weeksArray: ScheduleModel[] = [];
-// カレンダー描画するときに使うデータ。Navigationでも使っている
-
-// ----------
-
 // まずは巨大な配列を作る処理
 // weeksArrayに４年前から４年後までの巨大な配列ができている
+const weeksArray: ScheduleModel[] = [];
+const today: Date = new Date();
 const firstDayOfWeeksArray = add(today, { years: -4 });
 for (let i = 0; i < 2920; i++) {
   const aDay: ScheduleModel = {
