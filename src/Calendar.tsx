@@ -25,16 +25,7 @@ interface ScheduleModel<T = ScheduleMetadata> {
 
 // まずは巨大な配列を作る処理
 // weeksArrayに４年前から４年後までの巨大な配列ができている
-const weeksArray: ScheduleModel[] = [];
-const today: Date = new Date();
-const firstDayOfWeeksArray = add(today, { years: -4 });
-for (let i = 0; i < 2920; i++) {
-  const aDay: ScheduleModel = {
-    date: add(firstDayOfWeeksArray, { days: i }),
-    schedules: [],
-  };
-  weeksArray.push(aDay);
-}
+
 // ユーザー操作実装後は不要になるコードーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
 // targetYear / targetMonthはtodayだけでなく、以下の動作によってstateが変わりうる
@@ -134,6 +125,16 @@ const Schedules = () => {
     })
   );
   const classes = useStyles();
+  const weeksArray: ScheduleModel[] = [];
+  const today: Date = new Date();
+  const firstDayOfWeeksArray = add(today, { years: -4 });
+  for (let i = 0; i < 2920; i++) {
+    const aDay: ScheduleModel = {
+      date: add(firstDayOfWeeksArray, { days: i }),
+      schedules: [],
+    };
+    weeksArray.push(aDay);
+  }
 
   const dateOfTargetFirstDayOfTheMonth = getDay(targetFirstDayOfTheMonth);
   // カレンダー上でレンダーし始めるべきweeksArrayのIndex番号
