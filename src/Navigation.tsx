@@ -11,11 +11,14 @@ import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import React, { useState } from "react";
 
-export const Navigation = () => {
-  const today = new Date();
-  const [targetYear, setTargetYear] = useState(getYear(today));
-  const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
+interface Props {
+  targetYear: number;
+  targetMonth: number;
+  setTargetYear: React.Dispatch<React.SetStateAction<number>>;
+  setTargetMonth: React.Dispatch<React.SetStateAction<number>>;
+}
 
+export const Navigation = (props: Props) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
@@ -61,11 +64,11 @@ export const Navigation = () => {
         >
           <ArrowBackIosIcon
             onClick={() => {
-              if (targetMonth === 1) {
-                setTargetMonth(12);
-                setTargetYear(targetYear - 1);
+              if (props.targetMonth === 1) {
+                props.setTargetMonth(12);
+                props.setTargetYear(props.targetYear - 1);
               } else {
-                setTargetMonth(targetMonth - 1);
+                props.setTargetMonth(props.targetMonth - 1);
               }
             }}
           />
@@ -79,17 +82,17 @@ export const Navigation = () => {
         >
           <ArrowForwardIosIcon
             onClick={() => {
-              if (targetMonth === 12) {
-                setTargetMonth(1);
-                setTargetYear(targetYear + 1);
+              if (props.targetMonth === 12) {
+                props.setTargetMonth(1);
+                props.setTargetYear(props.targetYear + 1);
               } else {
-                setTargetMonth(targetMonth + 1);
+                props.setTargetMonth(props.targetMonth + 1);
               }
             }}
           />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
-          {targetYear}年{targetMonth}月
+          {props.targetYear}年{props.targetMonth}月
         </Typography>
       </Toolbar>
     </AppBar>
