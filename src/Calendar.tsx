@@ -23,6 +23,7 @@ interface ScheduleModel<T = ScheduleMetadata> {
   schedules: Array<T>;
 }
 
+type WeeksArrayModel = ScheduleModel[];
 // まずは巨大な配列を作る処理
 // weeksArrayに４年前から４年後までの巨大な配列ができている
 
@@ -69,12 +70,15 @@ interface ScheduleModel<T = ScheduleMetadata> {
 interface Props4CalendarBoard {
   targetYear: number;
   targetMonth: number;
-  // Schedules: (props: Props4Schedule) => JSX.Element;
+  weeksArray: WeeksArrayModel;
+  setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
 }
 
 interface Props4Schedule {
   targetFirstDayOfTheMonth: Date;
   weeksInMonth: number;
+  weeksArray: WeeksArrayModel;
+  setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -100,6 +104,8 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
         <Schedules
           targetFirstDayOfTheMonth={targetFirstDayOfTheMonth}
           weeksInMonth={weeksInMonth}
+          weeksArray={props.weeksArray}
+          setWeeksArray={props.setWeeksArray}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -140,7 +146,7 @@ const Schedules = (props: Props4Schedule) => {
     })
   );
   const classes = useStyles();
-  const weeksArray: ScheduleModel[] = [];
+
   const today: Date = new Date();
   const firstDayOfWeeksArray = add(today, { years: -4 });
   for (let i = 0; i < 2920; i++) {
@@ -148,7 +154,8 @@ const Schedules = (props: Props4Schedule) => {
       date: add(firstDayOfWeeksArray, { days: i }),
       schedules: [],
     };
-    weeksArray.push(aDay);
+    props.weeksArray.push(aDay);
+    props.setWeeksArray(props.weeksArray);
   }
 
   const dateOfTargetFirstDayOfTheMonth = getDay(props.targetFirstDayOfTheMonth);
@@ -159,7 +166,7 @@ const Schedules = (props: Props4Schedule) => {
       firstDayOfWeeksArray
     ) - dateOfTargetFirstDayOfTheMonth;
   // ここから該当月分レンダーしていったら、ピッタリの数になる
-  const renderWeeksArray = weeksArray.slice(
+  const renderWeeksArray = props.weeksArray.slice(
     renderStartIndex,
     renderStartIndex + 7 * props.weeksInMonth
   );
@@ -212,7 +219,9 @@ export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
   const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
-  // const [weeksArray, setWeeksArray] = useState()
+  const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
+
+  // const weeksArray: ScheduleModel[] = [];
   return (
     <CalendarAppStyle>
       <Navigation
@@ -221,7 +230,12 @@ export const CalendarApp = () => {
         setTargetYear={setTargetYear}
         setTargetMonth={setTargetMonth}
       />
-      <CalendarBoard targetYear={targetYear} targetMonth={targetMonth} />
+      <CalendarBoard
+        targetYear={targetYear}
+        targetMonth={targetMonth}
+        weeksArray={weeksArray}
+        setWeeksArray={setWeeksArray}
+      />
     </CalendarAppStyle>
   );
 };
