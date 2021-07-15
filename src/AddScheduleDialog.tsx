@@ -98,7 +98,7 @@ const AddTitleForm = (props: Props4AddTitleForm) => {
 };
 
 interface Props4ShowDateForm {
-  clickedDate: Date;
+  targetDate: Date;
 }
 const ShowDateForm = (props: Props4ShowDateForm) => {
   const classes = useStyles();
@@ -110,9 +110,9 @@ const ShowDateForm = (props: Props4ShowDateForm) => {
       <FormStyle>
         <TextField
           className={classes.formField}
-          value={`${getYear(props.clickedDate)}年${getMonth(
-            props.clickedDate
-          )}月${getDay(props.clickedDate)}日`}
+          value={`${getYear(props.targetDate)}年${getMonth(
+            props.targetDate
+          )}月${getDay(props.targetDate)}日`}
         />
       </FormStyle>
     </IconAndForm>
@@ -188,7 +188,7 @@ const SaveButtonStyle = styled.div`
 interface Props4AddScheduleDialog {
   open: boolean;
   handleClose: () => void;
-  clickedDate: Date;
+  targetDate: Date;
 }
 
 export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
@@ -244,7 +244,7 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
             titleHandleChange={titleHandleChange}
           />
         </TitleSet>
-        <ShowDateForm clickedDate={props.clickedDate} />
+        <ShowDateForm targetDate={props.targetDate} />
         <AddPlaceForm
           placeForm={placeForm}
           placeHandleChange={placeHandleChange}

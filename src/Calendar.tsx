@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import add from "date-fns/add";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
@@ -205,9 +205,31 @@ const Schedules = (props: Props4Schedule) => {
               <ScheduleExistBoxStyle
                 id={`${i}`}
                 key={`${day.date}`}
-                data-clickedDate={`${getYear(day.date)}-${
-                  getMonth(day.date) + 1
-                }-${getDay(day.date)}T11:11:11`}
+                data-clickedate={() => {
+                  if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
+                    return `${getYear(day.date)}-${
+                      getMonth(day.date) + 1
+                    }-${getDay(day.date)}T11:11:11`;
+                  } else if (
+                    getMonth(day.date) + 1 < 10 &&
+                    getDay(day.date) >= 10
+                  ) {
+                    return `${getYear(day.date)}-0${
+                      getMonth(day.date) + 1
+                    }-${getDay(day.date)}T11:11:11`;
+                  } else if (
+                    getMonth(day.date) + 1 >= 10 &&
+                    getDay(day.date) < 10
+                  ) {
+                    return `${getYear(day.date)}-${
+                      getMonth(day.date) + 1
+                    }-0${getDay(day.date)}T11:11:11`;
+                  } else {
+                    return `${getYear(day.date)}-0${
+                      getMonth(day.date) + 1
+                    }-0${getDay(day.date)}T11:11:11`;
+                  }
+                }}
                 onClick={(e: any) => {
                   props.getClickedDate(e);
                   props.handleClickOpen();
@@ -229,9 +251,32 @@ const Schedules = (props: Props4Schedule) => {
               <li
                 id={`${i}`}
                 key={`${day.date}`}
-                data-clickedDate={`${getYear(day.date)}-${
-                  getMonth(day.date) + 1
-                }-${getDay(day.date)}T11:11:11`}
+                data-clickedDate={() => {
+                  console.log("data-clickedDate動いている");
+                  if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
+                    return `${getYear(day.date)}-${
+                      getMonth(day.date) + 1
+                    }-${getDay(day.date)}T11:11:11`;
+                  } else if (
+                    getMonth(day.date) + 1 < 10 &&
+                    getDay(day.date) >= 10
+                  ) {
+                    return `${getYear(day.date)}-0${
+                      getMonth(day.date) + 1
+                    }-${getDay(day.date)}T11:11:11`;
+                  } else if (
+                    getMonth(day.date) + 1 >= 10 &&
+                    getDay(day.date) < 10
+                  ) {
+                    return `${getYear(day.date)}-${
+                      getMonth(day.date) + 1
+                    }-0${getDay(day.date)}T11:11:11`;
+                  } else {
+                    return `${getYear(day.date)}-0${
+                      getMonth(day.date) + 1
+                    }-0${getDay(day.date)}T11:11:11`;
+                  }
+                }}
                 onClick={(e: any) => {
                   props.getClickedDate(e);
                   props.handleClickOpen();
@@ -280,16 +325,17 @@ export const CalendarApp = () => {
   const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
   const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
   const [open, setOpen] = useState(false);
-  const [clickedDate, setClickedDate] = useState(today);
+  const [targetDate, setTargetDate] = useState(today);
   const handleClickOpen = () => {
     setOpen(true);
   };
   const getClickedDate = (e: any) => {
     const i: string = getID(e);
-    const clickedDateString: string =
-      document.getElementById(i)!.dataset.clickedDate!;
-    setClickedDate(parseISO(clickedDateString));
-    console.log(clickedDateString);
+    const clickedDateString: string = document
+      .getElementById(i)!
+      .getAttribute("data-clickedate")!;
+    setTargetDate(parseISO(clickedDateString));
+    console.log(document.getElementById(i)!.getAttribute("data-clickedate"));
   };
 
   const handleClose = () => {
@@ -297,7 +343,7 @@ export const CalendarApp = () => {
   };
 
   const getID = (e: any): string => {
-    const id = e.target.id;
+    const id = e.currentTarget.id;
     return id;
   };
 
@@ -323,7 +369,7 @@ export const CalendarApp = () => {
       <AddScheduleDialog
         open={open}
         handleClose={handleClose}
-        clickedDate={clickedDate}
+        targetDate={targetDate}
       />
     </CalendarAppStyle>
   );
