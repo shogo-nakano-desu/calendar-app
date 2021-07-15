@@ -203,9 +203,9 @@ const Schedules = (props: Props4Schedule) => {
             return (
               // day.schedules.map((schedule: ScheduleMetadata) => (
               <ScheduleExistBoxStyle
-                id={`${i}`}
+                id={`${day.date}`}
                 key={`${day.date}`}
-                data-clickedate={() => {
+                data-clickeddate={() => {
                   if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
                     return `${getYear(day.date)}-${
                       getMonth(day.date) + 1
@@ -235,10 +235,7 @@ const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {/* <Day2ButtonStyle id={`${i}`}> */}
                 {getDate(day.date)}
-                {/* </Day2ButtonStyle> */}
-
                 {day.schedules.map((schedule: ScheduleMetadata) => (
                   <Typography className={classes.scheduleTitleStyle}>
                     {schedule.title}
@@ -249,9 +246,9 @@ const Schedules = (props: Props4Schedule) => {
           } else {
             return (
               <li
-                id={`${i}`}
+                id={`${day.date}`}
                 key={`${day.date}`}
-                data-clickedDate={() => {
+                data-clickeddate={() => {
                   console.log("data-clickedDate動いている");
                   if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
                     return `${getYear(day.date)}-${
@@ -282,9 +279,7 @@ const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {/* <Day2ButtonStyle id="calendarButton"> */}
                 {getDate(day.date)}
-                {/* </Day2ButtonStyle> */}
               </li>
             );
           }
@@ -307,17 +302,18 @@ const CalendarAppStyle = styled.div`
   background-color: rgb(255, 255, 255);
 `;
 
-const Day2ButtonStyle = styled.div`
-  background-color: rgb(255, 255, 255);
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.00938em;
-  border-color: rgb(255, 255, 255);
-`;
+// スタイルだけ使いまわせそうだから、最後に見た目を整えるときに使う
+// const Day2ButtonStyle = styled.div`
+//   background-color: rgb(255, 255, 255);
+//   padding: 5px;
+//   display: flex;
+//   justify-content: center;
+//   font-size: 1rem;
+//   font-weight: 400;
+//   line-height: 1.5;
+//   letter-spacing: 0.00938em;
+//   border-color: rgb(255, 255, 255);
+// `;
 
 export const CalendarApp = () => {
   const today = new Date();
@@ -329,13 +325,14 @@ export const CalendarApp = () => {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const getClickedDate = (e: any) => {
     const i: string = getID(e);
     const clickedDateString: string = document
       .getElementById(i)!
-      .getAttribute("data-clickedate")!;
+      .getAttribute("data-clickeddate")!;
     setTargetDate(parseISO(clickedDateString));
-    console.log(document.getElementById(i)!.getAttribute("data-clickedate"));
+    console.log(i);
   };
 
   const handleClose = () => {
