@@ -3,6 +3,9 @@
 // 2. 入力フォームにもmaterial - uiがあるはずなので適用する
 
 import React, { useState } from "react";
+import getYear from "date-fns/getYear";
+import getMonth from "date-fns/getMonth";
+import getDay from "date-fns/getDay";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -14,6 +17,7 @@ import TextField from "@material-ui/core/TextField";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { flex, maxHeight, maxWidth } from "styled-system";
 import { max } from "date-fns/esm";
+import { ScheduleModel } from "./Calendar";
 
 // ----------ここで渡されているデータ
 interface TestScheduleMetadata {
@@ -93,7 +97,10 @@ const AddTitleForm = (props: Props4AddTitleForm) => {
   );
 };
 
-const ShowDateForm = () => {
+interface Props4ShowDateForm {
+  clickedDate: Date;
+}
+const ShowDateForm = (props: Props4ShowDateForm) => {
   const classes = useStyles();
   return (
     <IconAndForm>
@@ -101,7 +108,12 @@ const ShowDateForm = () => {
         <AccessTimeIcon />
       </IconStyle>
       <FormStyle>
-        <TextField className={classes.formField} placeholder="2021年7月15日" />
+        <TextField
+          className={classes.formField}
+          value={`${getYear(props.clickedDate)}年${getMonth(
+            props.clickedDate
+          )}月${getDay(props.clickedDate)}日`}
+        />
       </FormStyle>
     </IconAndForm>
   );
@@ -176,6 +188,7 @@ const SaveButtonStyle = styled.div`
 interface Props4AddScheduleDialog {
   open: boolean;
   handleClose: () => void;
+  clickedDate: Date;
 }
 
 export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
@@ -223,7 +236,7 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
         // }}
       >
         <CloseIconSet>
-          <HighlightOffIcon type="button" />
+          <HighlightOffIcon type="button" onClick={props.handleClose} />
         </CloseIconSet>
         <TitleSet>
           <AddTitleForm
@@ -231,7 +244,7 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
             titleHandleChange={titleHandleChange}
           />
         </TitleSet>
-        <ShowDateForm />
+        <ShowDateForm clickedDate={props.clickedDate} />
         <AddPlaceForm
           placeForm={placeForm}
           placeHandleChange={placeHandleChange}
@@ -254,7 +267,7 @@ const Position = styled.div`
 const CloseIconSet = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 10px;
+  margin: 10px;　
   height: 15%;
 `;
 
