@@ -7,10 +7,15 @@ import getWeeksInMonth from "date-fns/getWeeksInMonth";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import getDate from "date-fns/getDate";
 import getDay from "date-fns/getDay";
+import parseISO from "date-fns/parseISO";
 import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
 import { Navigation } from "./Navigation";
+import { AddScheduleDialog } from "./AddScheduleDialog";
+import "./Calendar.css";
+import { getISODay } from "date-fns/esm";
 
 // 予定の持たせ方の型定義
 interface ScheduleMetadata {
@@ -18,7 +23,7 @@ interface ScheduleMetadata {
   place: string;
   description: string;
 }
-interface ScheduleModel<T = ScheduleMetadata> {
+export interface ScheduleModel<T = ScheduleMetadata> {
   date: Date;
   schedules: Array<T>;
 }
@@ -72,13 +77,22 @@ interface Props4CalendarBoard {
   targetMonth: number;
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
+  open: boolean;
+  handleClose: () => void;
+  getID: (e: any) => string;
+  getClickedDate: (e: any) => void;
+  handleClickOpen: () => void;
 }
-
 interface Props4Schedule {
   targetFirstDayOfTheMonth: Date;
   weeksInMonth: number;
   weeksArray: WeeksArrayModel;
   setWeeksArray: React.Dispatch<React.SetStateAction<WeeksArrayModel>>;
+  open: boolean;
+  handleClose: () => void;
+  getID: (e: any) => string;
+  getClickedDate: (e: any) => void;
+  handleClickOpen: () => void;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -106,6 +120,11 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
           weeksInMonth={weeksInMonth}
           weeksArray={props.weeksArray}
           setWeeksArray={props.setWeeksArray}
+          open={props.open}
+          handleClose={props.handleClose}
+          getID={props.getID}
+          getClickedDate={props.getClickedDate}
+          handleClickOpen={props.handleClickOpen}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -119,7 +138,7 @@ const BorderStyle = styled.div`
   margin: 8px;
 `;
 
-const CalendarGridStyle = styled.div`
+const CalendarGridStyle = styled.ul`
   width: 100%;
   height: 100%;
   display: grid;
@@ -136,6 +155,11 @@ const Schedules = (props: Props4Schedule) => {
         padding: "5px",
         display: "flex",
         justifyContent: "center",
+        fontSize: "1rem",
+        fontFamily: "Roboto Helvetica Arial sans-serif",
+        fontWeight: 400,
+        lineHeight: 1.5,
+        letterSpacing: "0.00938em",
       },
       scheduleTitleStyle: {
         backgroundColor: "rgb(33, 151, 156)",
@@ -172,16 +196,27 @@ const Schedules = (props: Props4Schedule) => {
   );
   return (
     <>
-      {renderWeeksArray.map((day) =>
+      {renderWeeksArray.map((day, i) =>
         // <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
         {
           if (day.schedules.length >= 1) {
             return (
               // day.schedules.map((schedule: ScheduleMetadata) => (
-              <ScheduleExistBoxStyle>
-                <Typography className={classes.dayStyle}>
+              <ScheduleExistBoxStyle
+                id={`${i}`}
+                key={`${day.date}`}
+                data-clickedDate={`${getYear(day.date)}-${
+                  getMonth(day.date) + 1
+                }-${getDay(day.date)}T11:11:11`}
+                onClick={(e: any) => {
+                  props.getClickedDate(e);
+                  props.handleClickOpen();
+                }}
+              >
+                <Day2ButtonStyle id={`${i}`}>
                   {getDate(day.date)}
-                </Typography>
+                </Day2ButtonStyle>
+
                 {day.schedules.map((schedule: ScheduleMetadata) => (
                   <Typography className={classes.scheduleTitleStyle}>
                     {schedule.title}
@@ -191,9 +226,21 @@ const Schedules = (props: Props4Schedule) => {
             );
           } else {
             return (
-              <Typography className={classes.dayStyle}>
-                {getDate(day.date)}
-              </Typography>
+              <li
+                id={`${i}`}
+                key={`${day.date}`}
+                data-clickedDate={`${getYear(day.date)}-${
+                  getMonth(day.date) + 1
+                }-${getDay(day.date)}T11:11:11`}
+                onClick={(e: any) => {
+                  props.getClickedDate(e);
+                  props.handleClickOpen();
+                }}
+              >
+                <Day2ButtonStyle id="calendarButton">
+                  {getDate(day.date)}
+                </Day2ButtonStyle>
+              </li>
             );
           }
         }
@@ -201,7 +248,7 @@ const Schedules = (props: Props4Schedule) => {
     </>
   );
 };
-const ScheduleExistBoxStyle = styled.div`
+const ScheduleExistBoxStyle = styled.li`
   background-color: rgb(255, 255, 255);
   width: 100%;
   height: 100%;
@@ -215,13 +262,47 @@ const CalendarAppStyle = styled.div`
   background-color: rgb(255, 255, 255);
 `;
 
+const Day2ButtonStyle = styled.div`
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  border-color: rgb(255, 255, 255);
+`;
+
 export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
   const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
   const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
+  const [open, setOpen] = useState(false);
+  const [clickedDate, setClickedDate] = useState(today);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const getClickedDate = (e: any) => {
+    const i = getID(e);
+    const clickedDateString: string = document
+      .getElementById(i)!
+      .getAttribute("clickedDate")!;
+    setClickedDate(parseISO(clickedDateString));
+  };
 
-  // const weeksArray: ScheduleModel[] = [];
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getID = (e: any): string => {
+    const id = e.target.id;
+    console.log(id);
+    return id;
+  };
+  console.log(clickedDate);
+
   return (
     <CalendarAppStyle>
       <Navigation
@@ -235,6 +316,16 @@ export const CalendarApp = () => {
         targetMonth={targetMonth}
         weeksArray={weeksArray}
         setWeeksArray={setWeeksArray}
+        open={open}
+        handleClose={handleClose}
+        getID={getID}
+        getClickedDate={getClickedDate}
+        handleClickOpen={handleClickOpen}
+      />
+      <AddScheduleDialog
+        open={open}
+        handleClose={handleClose}
+        clickedDate={clickedDate}
       />
     </CalendarAppStyle>
   );
