@@ -213,9 +213,9 @@ const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                <Day2ButtonStyle id={`${i}`}>
-                  {getDate(day.date)}
-                </Day2ButtonStyle>
+                {/* <Day2ButtonStyle id={`${i}`}> */}
+                {getDate(day.date)}
+                {/* </Day2ButtonStyle> */}
 
                 {day.schedules.map((schedule: ScheduleMetadata) => (
                   <Typography className={classes.scheduleTitleStyle}>
@@ -237,9 +237,9 @@ const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                <Day2ButtonStyle id="calendarButton">
-                  {getDate(day.date)}
-                </Day2ButtonStyle>
+                {/* <Day2ButtonStyle id="calendarButton"> */}
+                {getDate(day.date)}
+                {/* </Day2ButtonStyle> */}
               </li>
             );
           }
@@ -285,11 +285,11 @@ export const CalendarApp = () => {
     setOpen(true);
   };
   const getClickedDate = (e: any) => {
-    const i = getID(e);
-    const clickedDateString: string = document
-      .getElementById(i)!
-      .getAttribute("clickedDate")!;
+    const i: string = getID(e);
+    const clickedDateString: string =
+      document.getElementById(i)!.dataset.clickedDate!;
     setClickedDate(parseISO(clickedDateString));
+    console.log(clickedDateString);
   };
 
   const handleClose = () => {
@@ -298,10 +298,8 @@ export const CalendarApp = () => {
 
   const getID = (e: any): string => {
     const id = e.target.id;
-    console.log(id);
     return id;
   };
-  console.log(clickedDate);
 
   return (
     <CalendarAppStyle>
