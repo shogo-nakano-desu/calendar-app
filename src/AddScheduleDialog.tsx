@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
-import getDay from "date-fns/getDay";
+import getDate from "date-fns/getDate";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -110,9 +110,9 @@ const ShowDateForm = (props: Props4ShowDateForm) => {
       <FormStyle>
         <TextField
           className={classes.formField}
-          value={`${getYear(props.targetDate)}年${getMonth(
-            props.targetDate
-          )}月${getDay(props.targetDate)}日`}
+          value={`${getYear(props.targetDate)}年${
+            getMonth(props.targetDate) + 1
+          }月${getDate(props.targetDate)}日`}
         />
       </FormStyle>
     </IconAndForm>

@@ -3,6 +3,7 @@ import add from "date-fns/add";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import getDaysInMonth from "date-fns/getDaysInMonth";
+import toDate from "date-fns/toDate";
 import getWeeksInMonth from "date-fns/getWeeksInMonth";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import getDate from "date-fns/getDate";
@@ -315,6 +316,35 @@ const CalendarAppStyle = styled.div`
 //   border-color: rgb(255, 255, 255);
 // `;
 
+// interface En2Num {
+//   Jan: number;
+//   Feb: number;
+//   Mar: number;
+//   Apr: number;
+//   May: number;
+//   Jun: number;
+//   Jul: number;
+//   Aug: number;
+//   Sep: number;
+//   Oct: number;
+//   Nov: number;
+//   Dec: number;
+// }
+// const En2Num = {
+//   Jan: 1,
+//   Feb: 2,
+//   Mar: 3,
+//   Apr: 4,
+//   May: 5,
+//   Jun: 6,
+//   Jul: 7,
+//   Aug: 8,
+//   Sep: 9,
+//   Oct: 10,
+//   Nov: 11,
+//   Dec: 12,
+// };
+
 export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
@@ -327,12 +357,56 @@ export const CalendarApp = () => {
   };
 
   const getClickedDate = (e: any) => {
-    const i: string = getID(e);
-    const clickedDateString: string = document
-      .getElementById(i)!
-      .getAttribute("data-clickeddate")!;
-    setTargetDate(parseISO(clickedDateString));
-    console.log(i);
+    const stringDate: string = getID(e);
+    const stringDateMonth = stringDate.match(/(?<=^.{4}).{3}/);
+    const month = () => {
+      if (stringDateMonth === null) {
+        return 0;
+      } else if (stringDateMonth[0] === "Jan") {
+        return 1;
+      } else if (stringDateMonth[0] === "Feb") {
+        return 2;
+      } else if (stringDateMonth[0] === "Mar") {
+        return 3;
+      } else if (stringDateMonth[0] === "Apr") {
+        return 4;
+      } else if (stringDateMonth[0] === "May") {
+        return 5;
+      } else if (stringDateMonth[0] === "Jun") {
+        return 6;
+      } else if (stringDateMonth[0] === "Jul") {
+        return 7;
+      } else if (stringDateMonth[0] === "Aug") {
+        return 8;
+      } else if (stringDateMonth[0] === "Sep") {
+        return 9;
+      } else if (stringDateMonth[0] === "Oct") {
+        return 10;
+      } else if (stringDateMonth[0] === "Nov") {
+        return 11;
+      } else {
+        return 12;
+      }
+    };
+    const stringDateYear = stringDate.match(/(?<=^.{11}).{4}/);
+    const year = () => {
+      if (stringDateYear === null) {
+        return 0;
+      } else {
+        return parseInt(stringDateYear[0]);
+      }
+    };
+    const stringDateDay = stringDate.match(/(?<=^.{8}).{2}/);
+    const day = () => {
+      if (stringDateDay === null) {
+        return 0;
+      } else {
+        return parseInt(stringDateDay[0]);
+      }
+    };
+    const Num2Date = new Date(year(), month() - 1, day());
+
+    setTargetDate(Num2Date);
   };
 
   const handleClose = () => {
