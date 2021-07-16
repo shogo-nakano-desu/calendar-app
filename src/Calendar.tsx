@@ -14,6 +14,7 @@ import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
 import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
+import { textAlign } from "styled-system";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
@@ -139,6 +140,8 @@ export const Schedules = (props: Props4Schedule) => {
         color: "rgb(255, 255, 255)",
         borderRadius: "5px",
         margin: "1px",
+        height: "20px",
+        width: "100%",
       },
     })
   );
@@ -182,7 +185,11 @@ export const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {getDate(day.date)}
+                <div
+                  style={{ height: "20%", width: "100%", textAlign: "center" }}
+                >
+                  {getDate(day.date)}
+                </div>
                 {day.schedules.map((schedule: ScheduleMetadata, i) => (
                   <Typography
                     id={`${schedule.title}///title///${schedule.place}///place///${schedule.description}///description///${i}`}
@@ -207,7 +214,11 @@ export const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {getDate(day.date)}
+                <div
+                  style={{ height: "20%", width: "100%", textAlign: "center" }}
+                >
+                  {getDate(day.date)}
+                </div>
               </ScheduleBoxStyle>
             );
           }
@@ -222,8 +233,11 @@ const ScheduleBoxStyle = styled.li`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  aligh-items: flex-start;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  margin-bottom: 10px;
 `;
 
 const CalendarAppStyle = styled.div`
@@ -233,6 +247,12 @@ const CalendarAppStyle = styled.div`
   flex-direction: column;
   background-color: rgb(255, 255, 255);
 `;
+
+// const SpaceStyle = styled.div`
+//   height: 10px;
+//   width: 100%;
+//   background-color: black;
+// `;
 
 // スタイルだけ使いまわせそうだから、最後に見た目を整えるときに使う
 // const Day2ButtonStyle = styled.div`
