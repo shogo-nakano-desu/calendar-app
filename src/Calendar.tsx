@@ -9,6 +9,7 @@ import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import "@fontsource/roboto";
 import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
@@ -115,6 +116,8 @@ const CalendarGridStyle = styled.ul`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: ${({ theme }) => theme.rows};
   grid-gap: 1px;
+  list-style: none;
+  justify-items: center;
 `;
 
 export const Schedules = (props: Props4Schedule) => {
@@ -171,7 +174,7 @@ export const Schedules = (props: Props4Schedule) => {
         {
           if (day.schedules.length >= 1) {
             return (
-              <ScheduleExistBoxStyle
+              <ScheduleBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
                 onClick={(e: any) => {
@@ -192,11 +195,11 @@ export const Schedules = (props: Props4Schedule) => {
                     {schedule.title}
                   </Typography>
                 ))}
-              </ScheduleExistBoxStyle>
+              </ScheduleBoxStyle>
             );
           } else {
             return (
-              <li
+              <ScheduleBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
                 onClick={(e: any) => {
@@ -205,7 +208,7 @@ export const Schedules = (props: Props4Schedule) => {
                 }}
               >
                 {getDate(day.date)}
-              </li>
+              </ScheduleBoxStyle>
             );
           }
         }
@@ -214,10 +217,13 @@ export const Schedules = (props: Props4Schedule) => {
   );
 };
 
-const ScheduleExistBoxStyle = styled.li`
+const ScheduleBoxStyle = styled.li`
   background-color: rgb(255, 255, 255);
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;
 
 const CalendarAppStyle = styled.div`

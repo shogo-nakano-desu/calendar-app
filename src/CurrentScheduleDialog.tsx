@@ -39,13 +39,13 @@ interface Props4CurrentScheduleDialog {
 }
 export const CurrentScheduleDialog = (props: Props4CurrentScheduleDialog) => {
   return (
-    <Outline>
-      <MainBoard
-        openSchedule={props.openSchedule}
-        handleCloseSchedule={props.handleCloseSchedule}
-        targetSchedule={props.targetSchedule}
-      />
-    </Outline>
+    // <Outline>
+    <MainBoard
+      openSchedule={props.openSchedule}
+      handleCloseSchedule={props.handleCloseSchedule}
+      targetSchedule={props.targetSchedule}
+    />
+    // </Outline>
   );
 };
 

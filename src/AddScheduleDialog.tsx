@@ -197,58 +197,58 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
   const classes = useStyles();
 
   return (
-    <Position>
-      <Dialog
-        classes={{
-          container: classes.container,
-          paperScrollPaper: classes.paperScrollPaper,
-        }}
-        open={props.open}
-        onClose={props.handleClose}
-        fullWidth
-        maxWidth="xl"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        // style={{
-        //   height: "100%",
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        //   backgroundColor: "rgba(128, 128, 128, 0.5)",
-        //   padding: 0,
-        // }}
-      >
-        <CloseIconSet>
-          <HighlightOffIcon type="button" onClick={props.handleClose} />
-        </CloseIconSet>
-        <TitleSet>
-          <AddTitleForm
-            titleForm={props.titleForm}
-            titleHandleChange={props.titleHandleChange}
-          />
-        </TitleSet>
-        <ShowDateForm targetDate={props.targetDate} />
-        <AddPlaceForm
-          placeForm={props.placeForm}
-          placeHandleChange={props.placeHandleChange}
-        />
-        <AddDescriptionForm
-          descriptionForm={props.descriptionForm}
-          descriptionHandleChange={props.descriptionHandleChange}
-        />
-        <SaveButton
+    // <Position>
+    <Dialog
+      classes={{
+        container: classes.container,
+        paperScrollPaper: classes.paperScrollPaper,
+      }}
+      open={props.open}
+      onClose={props.handleClose}
+      fullWidth
+      maxWidth="xl"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      // style={{
+      //   height: "100%",
+      //   display: "flex",
+      //   justifyContent: "center",
+      //   alignItems: "center",
+      //   backgroundColor: "rgba(128, 128, 128, 0.5)",
+      //   padding: 0,
+      // }}
+    >
+      <CloseIconSet>
+        <HighlightOffIcon type="button" onClick={props.handleClose} />
+      </CloseIconSet>
+      <TitleSet>
+        <AddTitleForm
           titleForm={props.titleForm}
-          placeForm={props.placeForm}
-          descriptionForm={props.descriptionForm}
-          handleSave={props.handleSave}
-          handleClose={props.handleClose}
-          clearFormState={props.clearFormState}
+          titleHandleChange={props.titleHandleChange}
         />
-      </Dialog>
-    </Position>
+      </TitleSet>
+      <ShowDateForm targetDate={props.targetDate} />
+      <AddPlaceForm
+        placeForm={props.placeForm}
+        placeHandleChange={props.placeHandleChange}
+      />
+      <AddDescriptionForm
+        descriptionForm={props.descriptionForm}
+        descriptionHandleChange={props.descriptionHandleChange}
+      />
+      <SaveButton
+        titleForm={props.titleForm}
+        placeForm={props.placeForm}
+        descriptionForm={props.descriptionForm}
+        handleSave={props.handleSave}
+        handleClose={props.handleClose}
+        clearFormState={props.clearFormState}
+      />
+    </Dialog>
+    // </Position>
   );
 };
 
