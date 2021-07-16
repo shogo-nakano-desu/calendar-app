@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import getDate from "date-fns/getDate";
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -18,6 +19,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { flex, maxHeight, maxWidth } from "styled-system";
 import { max } from "date-fns/esm";
 import { ScheduleModel } from "./Calendar";
+import { ScheduleMetadata, Schedules } from "./Calendar";
 
 // ----------ここで渡されているデータ
 interface TestScheduleMetadata {
@@ -168,10 +170,25 @@ const AddDescriptionForm = (props: Props4AddDescriptionForm) => {
   );
 };
 
-const SaveButton = () => {
+interface Props4SaveButton {
+  titleForm: string;
+  placeForm: string;
+  descriptionForm: string;
+  handleSave: () => void;
+  handleClose: () => void;
+}
+
+const SaveButton = (props: Props4SaveButton) => {
   return (
     <SaveButtonStyle>
-      <Button variant="outlined" color="primary">
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={() => {
+          props.handleSave();
+          props.handleClose();
+        }}
+      >
         保存
       </Button>
     </SaveButtonStyle>
@@ -189,26 +206,18 @@ interface Props4AddScheduleDialog {
   open: boolean;
   handleClose: () => void;
   targetDate: Date;
+  firstDayOfWeeksArray: Date;
+  titleForm: string;
+  placeForm: string;
+  descriptionForm: string;
+  handleSave: () => void;
+  titleHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  descriptionHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
-  const [titleForm, setTitleForm] = useState("");
-  const [placeForm, setPlaceForm] = useState("");
-  const [descriptionForm, setDescriptionForm] = useState("");
-
   const classes = useStyles();
-
-  const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleForm(e.target.value);
-  };
-
-  const placeHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaceForm(e.target.value);
-  };
-
-  const descriptionHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDescriptionForm(e.target.value);
-  };
 
   return (
     <Position>
@@ -240,20 +249,26 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
         </CloseIconSet>
         <TitleSet>
           <AddTitleForm
-            titleForm={titleForm}
-            titleHandleChange={titleHandleChange}
+            titleForm={props.titleForm}
+            titleHandleChange={props.titleHandleChange}
           />
         </TitleSet>
         <ShowDateForm targetDate={props.targetDate} />
         <AddPlaceForm
-          placeForm={placeForm}
-          placeHandleChange={placeHandleChange}
+          placeForm={props.placeForm}
+          placeHandleChange={props.placeHandleChange}
         />
         <AddDescriptionForm
-          descriptionForm={descriptionForm}
-          descriptionHandleChange={descriptionHandleChange}
+          descriptionForm={props.descriptionForm}
+          descriptionHandleChange={props.descriptionHandleChange}
         />
-        <SaveButton />
+        <SaveButton
+          titleForm={props.titleForm}
+          placeForm={props.placeForm}
+          descriptionForm={props.descriptionForm}
+          handleSave={props.handleSave}
+          handleClose={props.handleClose}
+        />
       </Dialog>
     </Position>
   );
