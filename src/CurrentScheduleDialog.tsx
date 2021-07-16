@@ -5,6 +5,7 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RoomIcon from "@material-ui/icons/Room";
 import NotesIcon from "@material-ui/icons/Notes";
 import Dialog from "@material-ui/core/Dialog";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import { ScheduleMetadata } from "./Calendar";
@@ -32,44 +33,69 @@ const testADay: TestScheduleModel = {
 };
 //-----------------
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "80%",
+      maxWidth: "500px",
+    },
+    paperScrollPaper: {
+      maxHeight: "300px",
+      height: "60%",
+    },
+    titleForm: {
+      width: "100%",
+      marginLeft: "10px",
+      marginRight: "10px",
+      display: "flex",
+      justifyContent: "center",
+      fontSize: "20px",
+    },
+    titleField: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    formField: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "center",
+    },
+    resize: {
+      fontSize: 24,
+    },
+  })
+);
+
 interface Props4CurrentScheduleDialog {
   openSchedule: boolean;
   handleCloseSchedule: () => void;
   targetSchedule: ScheduleMetadata;
 }
-export const CurrentScheduleDialog = (props: Props4CurrentScheduleDialog) => {
-  return (
-    // <Outline>
-    <MainBoard
-      openSchedule={props.openSchedule}
-      handleCloseSchedule={props.handleCloseSchedule}
-      targetSchedule={props.targetSchedule}
-    />
-    // </Outline>
-  );
-};
 
-const Outline = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(128, 128, 128, 0.5);
-  padding: 0;
-`;
-
-interface Props4MainBoard {
-  openSchedule: boolean;
-  handleCloseSchedule: () => void;
-  targetSchedule: ScheduleMetadata;
-}
 // この中に部品を並べていく。最終的にレンダーするのはこのコンポーネント
-const MainBoard = (props: Props4MainBoard) => {
+export const CurrentScheduleDialog = (props: Props4CurrentScheduleDialog) => {
+  const classes = useStyles();
   return (
-    <Dialog open={props.openSchedule} onClose={props.handleCloseSchedule}>
+    <Dialog
+      fullWidth
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      classes={{
+        container: classes.container,
+        paperScrollPaper: classes.paperScrollPaper,
+      }}
+      open={props.openSchedule}
+      onClose={props.handleCloseSchedule}
+    >
       <MainBoardStyle>
-        <TopSection />
+        <TopSection handleCloseSchedule={props.handleCloseSchedule} />
         <MiddleSection targetSchedule={props.targetSchedule} />
         <BottomSection targetSchedule={props.targetSchedule} />
       </MainBoardStyle>
@@ -77,19 +103,23 @@ const MainBoard = (props: Props4MainBoard) => {
   );
 };
 const MainBoardStyle = styled.div`
-  width: min(75%, 450px);
-  height: 25%;
+  width: 100%;
+  height: 100%;
   border-radius: 7px;
   background-color: rgb(255, 255, 255);
 `;
 
-const TopSection = () => {
+interface Props4TopSection {
+  handleCloseSchedule: () => void;
+}
+const TopSection = (props: Props4TopSection) => {
   return (
     <TopSectionStyle>
       <DeleteOutlined style={{ margin: "5px", fontSize: "30px" }} />
       <HighlightOffIcon
         style={{ margin: "5px", fontSize: "30px" }}
         type="button"
+        onClick={props.handleCloseSchedule}
       />
     </TopSectionStyle>
   );
