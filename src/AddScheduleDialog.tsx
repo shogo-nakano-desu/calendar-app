@@ -176,6 +176,7 @@ interface Props4SaveButton {
   descriptionForm: string;
   handleSave: () => void;
   handleClose: () => void;
+  clearFormState: () => void;
 }
 
 const SaveButton = (props: Props4SaveButton) => {
@@ -187,6 +188,7 @@ const SaveButton = (props: Props4SaveButton) => {
         onClick={() => {
           props.handleSave();
           props.handleClose();
+          props.clearFormState();
         }}
       >
         保存
@@ -214,6 +216,7 @@ interface Props4AddScheduleDialog {
   titleHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   descriptionHandleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  clearFormState: () => void;
 }
 
 export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
@@ -268,6 +271,7 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
           descriptionForm={props.descriptionForm}
           handleSave={props.handleSave}
           handleClose={props.handleClose}
+          clearFormState={props.clearFormState}
         />
       </Dialog>
     </Position>

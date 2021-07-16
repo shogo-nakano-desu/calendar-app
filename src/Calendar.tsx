@@ -384,6 +384,12 @@ export const CalendarApp = () => {
     return id;
   };
 
+  const clearFormState = () => {
+    setTitleForm("");
+    setPlaceForm("");
+    setDescriptionForm("");
+  };
+
   return (
     <CalendarAppStyle>
       <Navigation
@@ -415,6 +421,7 @@ export const CalendarApp = () => {
         titleHandleChange={titleHandleChange}
         placeHandleChange={placeHandleChange}
         descriptionHandleChange={descriptionHandleChange}
+        clearFormState={clearFormState}
       />
     </CalendarAppStyle>
   );
