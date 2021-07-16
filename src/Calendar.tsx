@@ -9,10 +9,12 @@ import getDay from "date-fns/getDay";
 import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import "@fontsource/roboto";
 import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
 import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
+import { textAlign } from "styled-system";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
@@ -48,6 +50,7 @@ interface Props4CalendarBoard {
   handleClickOpen: () => void;
   handleClickOpenSchedule: (e: any) => void;
   getCurrentSchedule: (e: any) => void;
+  getCurrentScheduleDate: (e: any) => void;
 }
 interface Props4Schedule {
   targetFirstDayOfTheMonth: Date;
@@ -61,6 +64,7 @@ interface Props4Schedule {
   handleClickOpen: () => void;
   handleClickOpenSchedule: (e: any) => void;
   getCurrentSchedule: (e: any) => void;
+  getCurrentScheduleDate: (e: any) => void;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -95,6 +99,7 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
           handleClickOpen={props.handleClickOpen}
           handleClickOpenSchedule={props.handleClickOpenSchedule}
           getCurrentSchedule={props.getCurrentSchedule}
+          getCurrentScheduleDate={props.getCurrentScheduleDate}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -115,6 +120,8 @@ const CalendarGridStyle = styled.ul`
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: ${({ theme }) => theme.rows};
   grid-gap: 1px;
+  list-style: none;
+  justify-items: center;
 `;
 
 export const Schedules = (props: Props4Schedule) => {
@@ -136,6 +143,8 @@ export const Schedules = (props: Props4Schedule) => {
         color: "rgb(255, 255, 255)",
         borderRadius: "5px",
         margin: "1px",
+        height: "20px",
+        width: "100%",
       },
     })
   );
@@ -171,7 +180,7 @@ export const Schedules = (props: Props4Schedule) => {
         {
           if (day.schedules.length >= 1) {
             return (
-              <ScheduleExistBoxStyle
+              <ScheduleBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
                 onClick={(e: any) => {
@@ -179,24 +188,29 @@ export const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {getDate(day.date)}
+                <div
+                  style={{ height: "20%", width: "100%", textAlign: "center" }}
+                >
+                  {getDate(day.date)}
+                </div>
                 {day.schedules.map((schedule: ScheduleMetadata, i) => (
                   <Typography
-                    id={`${schedule.title}///title///${schedule.place}///place///${schedule.description}///description///${i}`}
+                    id={`${schedule.title}///title///${schedule.place}///place///${schedule.description}///description///${day.date}`}
                     className={classes.scheduleTitleStyle}
                     onClick={(e: any) => {
                       props.getCurrentSchedule(e);
+                      props.getCurrentScheduleDate(e);
                       props.handleClickOpenSchedule(e);
                     }}
                   >
                     {schedule.title}
                   </Typography>
                 ))}
-              </ScheduleExistBoxStyle>
+              </ScheduleBoxStyle>
             );
           } else {
             return (
-              <li
+              <ScheduleBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
                 onClick={(e: any) => {
@@ -204,8 +218,12 @@ export const Schedules = (props: Props4Schedule) => {
                   props.handleClickOpen();
                 }}
               >
-                {getDate(day.date)}
-              </li>
+                <div
+                  style={{ height: "20%", width: "100%", textAlign: "center" }}
+                >
+                  {getDate(day.date)}
+                </div>
+              </ScheduleBoxStyle>
             );
           }
         }
@@ -214,10 +232,16 @@ export const Schedules = (props: Props4Schedule) => {
   );
 };
 
-const ScheduleExistBoxStyle = styled.li`
+const ScheduleBoxStyle = styled.li`
   background-color: rgb(255, 255, 255);
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  aligh-items: flex-start;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  margin-bottom: 10px;
 `;
 
 const CalendarAppStyle = styled.div`
@@ -227,6 +251,12 @@ const CalendarAppStyle = styled.div`
   flex-direction: column;
   background-color: rgb(255, 255, 255);
 `;
+
+// const SpaceStyle = styled.div`
+//   height: 10px;
+//   width: 100%;
+//   background-color: black;
+// `;
 
 // スタイルだけ使いまわせそうだから、最後に見た目を整えるときに使う
 // const Day2ButtonStyle = styled.div`
@@ -257,6 +287,7 @@ export const CalendarApp = () => {
     place: "",
     description: "",
   });
+
   const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleForm(e.target.value);
   };
@@ -353,9 +384,122 @@ export const CalendarApp = () => {
 
   const getID = (e: any): string => {
     const id = e.currentTarget.id;
+    console.log(id);
     return id;
   };
 
+  const getCurrentScheduleDate = (e: any) => {
+    const scheduleID = getID(e);
+    const scheduleIDDate = scheduleID.match(
+      /(?<=\/\/\/description\/\/\/)(.*)/
+    )![0];
+    const stringDateYear = scheduleIDDate.match(/(?<=^.{11}).{4}/);
+    const year = () => {
+      if (stringDateYear === null) {
+        return 0;
+      } else {
+        return parseInt(stringDateYear[0]);
+      }
+    };
+    const stringDateMonth = scheduleIDDate.match(/(?<=^.{4}).{3}/);
+    const month = () => {
+      if (stringDateMonth === null) {
+        return 0;
+      } else if (stringDateMonth[0] === "Jan") {
+        return 1;
+      } else if (stringDateMonth[0] === "Feb") {
+        return 2;
+      } else if (stringDateMonth[0] === "Mar") {
+        return 3;
+      } else if (stringDateMonth[0] === "Apr") {
+        return 4;
+      } else if (stringDateMonth[0] === "May") {
+        return 5;
+      } else if (stringDateMonth[0] === "Jun") {
+        return 6;
+      } else if (stringDateMonth[0] === "Jul") {
+        return 7;
+      } else if (stringDateMonth[0] === "Aug") {
+        return 8;
+      } else if (stringDateMonth[0] === "Sep") {
+        return 9;
+      } else if (stringDateMonth[0] === "Oct") {
+        return 10;
+      } else if (stringDateMonth[0] === "Nov") {
+        return 11;
+      } else {
+        return 12;
+      }
+    };
+
+    const stringDateDay = scheduleIDDate.match(/(?<=^.{8}).{2}/);
+    const day = () => {
+      if (stringDateDay === null) {
+        return 0;
+      } else {
+        return parseInt(stringDateDay[0]);
+      }
+    };
+    const Num2Date = new Date(year(), month() - 1, day());
+    setTargetDate(Num2Date);
+  };
+
+  // const getCurrentScheduleDate = (e: any) => {
+  //   const childID = getID(e);
+  //   const parentID = document.getElementById(childID)!.parentElement!.id;
+  //   console.log(parentID);
+  //   const stringDateYear = parentID.match(/(?<=^.{11}).{4}/);
+  //   const year = () => {
+  //     if (stringDateYear === null) {
+  //       return 0;
+  //     } else {
+  //       return parseInt(stringDateYear[0]);
+  //     }
+  //   };
+  //   const stringDateMonth = parentID.match(/(?<=^.{4}).{3}/);
+  //   const month = () => {
+  //     if (stringDateMonth === null) {
+  //       return 0;
+  //     } else if (stringDateMonth[0] === "Jan") {
+  //       return 1;
+  //     } else if (stringDateMonth[0] === "Feb") {
+  //       return 2;
+  //     } else if (stringDateMonth[0] === "Mar") {
+  //       return 3;
+  //     } else if (stringDateMonth[0] === "Apr") {
+  //       return 4;
+  //     } else if (stringDateMonth[0] === "May") {
+  //       return 5;
+  //     } else if (stringDateMonth[0] === "Jun") {
+  //       return 6;
+  //     } else if (stringDateMonth[0] === "Jul") {
+  //       return 7;
+  //     } else if (stringDateMonth[0] === "Aug") {
+  //       return 8;
+  //     } else if (stringDateMonth[0] === "Sep") {
+  //       return 9;
+  //     } else if (stringDateMonth[0] === "Oct") {
+  //       return 10;
+  //     } else if (stringDateMonth[0] === "Nov") {
+  //       return 11;
+  //     } else {
+  //       return 12;
+  //     }
+  //   };
+
+  //   const stringDateDay = parentID.match(/(?<=^.{8}).{2}/);
+  //   const day = () => {
+  //     if (stringDateDay === null) {
+  //       return 0;
+  //     } else {
+  //       return parseInt(stringDateDay[0]);
+  //     }
+  //   };
+  //   const Num2Date = new Date(year(), month() - 1, day());
+  //   setTargetDate(Num2Date);
+  // };
+
+  // すでに存在するスケジュールの予定を獲得するための関数
   const getCurrentSchedule = (e: any) => {
     const scheduleString = getID(e);
     const title = scheduleString.match(/(.*)(?=\/\/\/title\/\/\/)/)![0];
@@ -401,6 +545,7 @@ export const CalendarApp = () => {
         handleClickOpen={handleClickOpen}
         handleClickOpenSchedule={handleClickOpenSchedule}
         getCurrentSchedule={getCurrentSchedule}
+        getCurrentScheduleDate={getCurrentScheduleDate}
       />
       <AddScheduleDialog
         open={open}
@@ -420,6 +565,7 @@ export const CalendarApp = () => {
         openSchedule={openSchedule}
         handleCloseSchedule={handleCloseSchedule}
         targetSchedule={targetSchedule}
+        targetDate={targetDate}
       />
     </CalendarAppStyle>
   );
