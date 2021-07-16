@@ -19,7 +19,7 @@ import "./Calendar.css";
 import { getISODay } from "date-fns/esm";
 
 // 予定の持たせ方の型定義
-interface ScheduleMetadata {
+export interface ScheduleMetadata {
   title: string;
   place: string;
   description: string;
@@ -30,40 +30,7 @@ export interface ScheduleModel<T = ScheduleMetadata> {
 }
 
 type WeeksArrayModel = ScheduleModel[];
-// まずは巨大な配列を作る処理
-// weeksArrayに４年前から４年後までの巨大な配列ができている
 
-// ユーザー操作実装後は不要になるコードーーーーーーーーーーーーーーーーーーーーーーーーーーー
-
-// targetYear / targetMonthはtodayだけでなく、以下の動作によってstateが変わりうる
-// そのためコードも変える必要あり
-// ・カレンダーのページをめくる
-
-// 以下のコードは予定を追加するコードなので、以下の動作と置き換える
-// ・AddScheduleDialogを開いてそこで保存をクリックしたら保存されるようにする
-// weeksArray[1460].schedules.push({
-//   title: "サッカー",
-//   place: "高校",
-//   description: "高校の友達と集まる",
-// });
-
-// weeksArray[1470].schedules.push({
-//   title: "映画",
-//   place: "TOHOシネマズ",
-//   description: "キャラクターか何かを見る。決まってない",
-// });
-
-// weeksArray[1480].schedules.push({
-//   title: "髪を切る",
-//   place: "neu",
-//   description: "流石にそろそろ切らないとまずい",
-// });
-
-// weeksArray[1470].schedules.push({
-//   title: "ジム",
-//   place: "エニタイム",
-//   description: "トレーニングと同時に、解約の手続きもする必要あり",
-// });
 // ↑ユーザー操作実装後は不要になるコードーーーーーーーーーーーーーーーーーーーーーーーーーーー
 // ↓そのまま残すコード
 // - CalendarApp
@@ -148,7 +115,7 @@ const CalendarGridStyle = styled.ul`
   grid-gap: 1px;
 `;
 
-const Schedules = (props: Props4Schedule) => {
+export const Schedules = (props: Props4Schedule) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       dayStyle: {
@@ -316,35 +283,6 @@ const CalendarAppStyle = styled.div`
 //   border-color: rgb(255, 255, 255);
 // `;
 
-// interface En2Num {
-//   Jan: number;
-//   Feb: number;
-//   Mar: number;
-//   Apr: number;
-//   May: number;
-//   Jun: number;
-//   Jul: number;
-//   Aug: number;
-//   Sep: number;
-//   Oct: number;
-//   Nov: number;
-//   Dec: number;
-// }
-// const En2Num = {
-//   Jan: 1,
-//   Feb: 2,
-//   Mar: 3,
-//   Apr: 4,
-//   May: 5,
-//   Jun: 6,
-//   Jul: 7,
-//   Aug: 8,
-//   Sep: 9,
-//   Oct: 10,
-//   Nov: 11,
-//   Dec: 12,
-// };
-
 export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
@@ -352,12 +290,35 @@ export const CalendarApp = () => {
   const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
   const [open, setOpen] = useState(false);
   const [targetDate, setTargetDate] = useState(today);
+  const [titleForm, setTitleForm] = useState("");
+  const [placeForm, setPlaceForm] = useState("");
+  const [descriptionForm, setDescriptionForm] = useState("");
+  const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleForm(e.target.value);
+  };
+
+  const placeHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlaceForm(e.target.value);
+  };
+
+  const descriptionHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescriptionForm(e.target.value);
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const getClickedDate = (e: any) => {
     const stringDate: string = getID(e);
+
+    const stringDateYear = stringDate.match(/(?<=^.{11}).{4}/);
+    const year = () => {
+      if (stringDateYear === null) {
+        return 0;
+      } else {
+        return parseInt(stringDateYear[0]);
+      }
+    };
     const stringDateMonth = stringDate.match(/(?<=^.{4}).{3}/);
     const month = () => {
       if (stringDateMonth === null) {
@@ -388,14 +349,7 @@ export const CalendarApp = () => {
         return 12;
       }
     };
-    const stringDateYear = stringDate.match(/(?<=^.{11}).{4}/);
-    const year = () => {
-      if (stringDateYear === null) {
-        return 0;
-      } else {
-        return parseInt(stringDateYear[0]);
-      }
-    };
+
     const stringDateDay = stringDate.match(/(?<=^.{8}).{2}/);
     const day = () => {
       if (stringDateDay === null) {
@@ -405,12 +359,24 @@ export const CalendarApp = () => {
       }
     };
     const Num2Date = new Date(year(), month() - 1, day());
-
     setTargetDate(Num2Date);
   };
+  const firstDayOfWeeksArray = add(today, { years: -4 });
 
   const handleClose = () => {
     setOpen(false);
+  };
+  const pushableForms: ScheduleMetadata = {
+    title: titleForm,
+    place: placeForm,
+    description: descriptionForm,
+  };
+
+  const indexCalc = differenceInCalendarDays(targetDate, firstDayOfWeeksArray);
+  console.log(indexCalc);
+  const handleSave = () => {
+    weeksArray[indexCalc].schedules.push(pushableForms);
+    setWeeksArray(weeksArray);
   };
 
   const getID = (e: any): string => {
@@ -441,6 +407,14 @@ export const CalendarApp = () => {
         open={open}
         handleClose={handleClose}
         targetDate={targetDate}
+        firstDayOfWeeksArray={firstDayOfWeeksArray}
+        titleForm={titleForm}
+        placeForm={placeForm}
+        descriptionForm={descriptionForm}
+        handleSave={handleSave}
+        titleHandleChange={titleHandleChange}
+        placeHandleChange={placeHandleChange}
+        descriptionHandleChange={descriptionHandleChange}
       />
     </CalendarAppStyle>
   );
