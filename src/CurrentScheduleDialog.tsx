@@ -120,7 +120,7 @@ interface Props4TopSection {
 const TopSection = (props: Props4TopSection) => {
   return (
     <TopSectionStyle>
-      <DeleteOutlined style={{ margin: "5px", fontSize: "30px" }} />
+      {/* <DeleteOutlined style={{ margin: "5px", fontSize: "30px" }} /> */}
       <HighlightOffIcon
         style={{ margin: "5px", fontSize: "30px" }}
         type="button"
