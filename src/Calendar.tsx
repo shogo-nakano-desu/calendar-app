@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
+import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
@@ -45,6 +46,8 @@ interface Props4CalendarBoard {
   getID: (e: any) => string;
   getClickedDate: (e: any) => void;
   handleClickOpen: () => void;
+  handleClickOpenSchedule: (e: any) => void;
+  getCurrentSchedule: (e: any) => void;
 }
 interface Props4Schedule {
   targetFirstDayOfTheMonth: Date;
@@ -56,6 +59,8 @@ interface Props4Schedule {
   getID: (e: any) => string;
   getClickedDate: (e: any) => void;
   handleClickOpen: () => void;
+  handleClickOpenSchedule: (e: any) => void;
+  getCurrentSchedule: (e: any) => void;
 }
 
 const CalendarBoard = (props: Props4CalendarBoard) => {
@@ -88,6 +93,8 @@ const CalendarBoard = (props: Props4CalendarBoard) => {
           getID={props.getID}
           getClickedDate={props.getClickedDate}
           handleClickOpen={props.handleClickOpen}
+          handleClickOpenSchedule={props.handleClickOpenSchedule}
+          getCurrentSchedule={props.getCurrentSchedule}
         />
       </CalendarGridStyle>
     </BorderStyle>
@@ -159,12 +166,11 @@ export const Schedules = (props: Props4Schedule) => {
   );
   return (
     <>
-      {renderWeeksArray.map((day, i) =>
+      {renderWeeksArray.map((day) =>
         // <ScheduleStyle>{getDate(day.date)}</ScheduleStyle>
         {
           if (day.schedules.length >= 1) {
             return (
-              // day.schedules.map((schedule: ScheduleMetadata) => (
               <ScheduleExistBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
@@ -174,8 +180,15 @@ export const Schedules = (props: Props4Schedule) => {
                 }}
               >
                 {getDate(day.date)}
-                {day.schedules.map((schedule: ScheduleMetadata) => (
-                  <Typography className={classes.scheduleTitleStyle}>
+                {day.schedules.map((schedule: ScheduleMetadata, i) => (
+                  <Typography
+                    id={`${schedule.title}///title///${schedule.place}///place///${schedule.description}///description///${i}`}
+                    className={classes.scheduleTitleStyle}
+                    onClick={(e: any) => {
+                      props.getCurrentSchedule(e);
+                      props.handleClickOpenSchedule(e);
+                    }}
+                  >
                     {schedule.title}
                   </Typography>
                 ))}
@@ -200,6 +213,7 @@ export const Schedules = (props: Props4Schedule) => {
     </>
   );
 };
+
 const ScheduleExistBoxStyle = styled.li`
   background-color: rgb(255, 255, 255);
   width: 100%;
@@ -233,10 +247,16 @@ export const CalendarApp = () => {
   const [targetMonth, setTargetMonth] = useState(getMonth(today) + 1);
   const [weeksArray, setWeeksArray] = useState<WeeksArrayModel>([]);
   const [open, setOpen] = useState(false);
+  const [openSchedule, setOpenSchedule] = useState(false);
   const [targetDate, setTargetDate] = useState(today);
   const [titleForm, setTitleForm] = useState("");
   const [placeForm, setPlaceForm] = useState("");
   const [descriptionForm, setDescriptionForm] = useState("");
+  const [targetSchedule, setTargetSchedule] = useState<ScheduleMetadata>({
+    title: "",
+    place: "",
+    description: "",
+  });
   const titleHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleForm(e.target.value);
   };
@@ -250,6 +270,11 @@ export const CalendarApp = () => {
   };
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleClickOpenSchedule = (e: any) => {
+    e.stopPropagation();
+    setOpenSchedule(true);
   };
 
   const getClickedDate = (e: any) => {
@@ -310,6 +335,10 @@ export const CalendarApp = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleCloseSchedule = () => {
+    setOpenSchedule(false);
+  };
   const pushableForms: ScheduleMetadata = {
     title: titleForm,
     place: placeForm,
@@ -317,7 +346,6 @@ export const CalendarApp = () => {
   };
 
   const indexCalc = differenceInCalendarDays(targetDate, firstDayOfWeeksArray);
-  console.log(indexCalc);
   const handleSave = () => {
     weeksArray[indexCalc].schedules.push(pushableForms);
     setWeeksArray(weeksArray);
@@ -326,6 +354,25 @@ export const CalendarApp = () => {
   const getID = (e: any): string => {
     const id = e.currentTarget.id;
     return id;
+  };
+
+  const getCurrentSchedule = (e: any) => {
+    const scheduleString = getID(e);
+    const title = scheduleString.match(/(.*)(?=\/\/\/title\/\/\/)/)![0];
+
+    const place = scheduleString.match(
+      /(?<=\/\/\/title\/\/\/)(.*)(?=\/\/\/place\/\/\/)/
+    )![0];
+
+    const description = scheduleString.match(
+      /(?<=\/\/\/place\/\/\/)(.*)(?=\/\/\/description\/\/\/)/
+    )![0];
+
+    setTargetSchedule({
+      title: title,
+      place: place,
+      description: description,
+    });
   };
 
   const clearFormState = () => {
@@ -352,6 +399,8 @@ export const CalendarApp = () => {
         getID={getID}
         getClickedDate={getClickedDate}
         handleClickOpen={handleClickOpen}
+        handleClickOpenSchedule={handleClickOpenSchedule}
+        getCurrentSchedule={getCurrentSchedule}
       />
       <AddScheduleDialog
         open={open}
@@ -366,6 +415,11 @@ export const CalendarApp = () => {
         placeHandleChange={placeHandleChange}
         descriptionHandleChange={descriptionHandleChange}
         clearFormState={clearFormState}
+      />
+      <CurrentScheduleDialog
+        openSchedule={openSchedule}
+        handleCloseSchedule={handleCloseSchedule}
+        targetSchedule={targetSchedule}
       />
     </CalendarAppStyle>
   );

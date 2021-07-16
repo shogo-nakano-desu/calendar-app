@@ -4,8 +4,10 @@ import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RoomIcon from "@material-ui/icons/Room";
 import NotesIcon from "@material-ui/icons/Notes";
+import Dialog from "@material-ui/core/Dialog";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
+import { ScheduleMetadata } from "./Calendar";
 
 //-----------------渡されるテストデータ
 interface TestScheduleMetadata {
@@ -30,10 +32,19 @@ const testADay: TestScheduleModel = {
 };
 //-----------------
 
-export const CurrentScheduleDialog = () => {
+interface Props4CurrentScheduleDialog {
+  openSchedule: boolean;
+  handleCloseSchedule: () => void;
+  targetSchedule: ScheduleMetadata;
+}
+export const CurrentScheduleDialog = (props: Props4CurrentScheduleDialog) => {
   return (
     <Outline>
-      <MainBoard />
+      <MainBoard
+        openSchedule={props.openSchedule}
+        handleCloseSchedule={props.handleCloseSchedule}
+        targetSchedule={props.targetSchedule}
+      />
     </Outline>
   );
 };
@@ -48,14 +59,21 @@ const Outline = styled.div`
   padding: 0;
 `;
 
+interface Props4MainBoard {
+  openSchedule: boolean;
+  handleCloseSchedule: () => void;
+  targetSchedule: ScheduleMetadata;
+}
 // この中に部品を並べていく。最終的にレンダーするのはこのコンポーネント
-const MainBoard = () => {
+const MainBoard = (props: Props4MainBoard) => {
   return (
-    <MainBoardStyle>
-      <TopSection />
-      <MiddleSection />
-      <BottomSection />
-    </MainBoardStyle>
+    <Dialog open={props.openSchedule} onClose={props.handleCloseSchedule}>
+      <MainBoardStyle>
+        <TopSection />
+        <MiddleSection targetSchedule={props.targetSchedule} />
+        <BottomSection targetSchedule={props.targetSchedule} />
+      </MainBoardStyle>
+    </Dialog>
   );
 };
 const MainBoardStyle = styled.div`
@@ -88,12 +106,12 @@ const TopSectionStyle = styled.div`
 // CloseAddScheduleDialogはそのままボタンとして使う
 
 // 色の四角、タイトル、日付を入れる
-const MiddleSection = () => {
+const MiddleSection = (props: Props) => {
   return (
     <ShowSectionStyle>
       <ColorBox></ColorBox>
       <TitleAndScheduleBoxStyle>
-        <TitleAndScheduleBox />
+        <TitleAndScheduleBox targetSchedule={props.targetSchedule} />
       </TitleAndScheduleBoxStyle>
     </ShowSectionStyle>
   );
@@ -124,10 +142,14 @@ const LeftSideOutlineStyle = styled.div`
   justify-content: center;
 `;
 
-const TitleAndScheduleBox = () => {
+interface Props {
+  targetSchedule: ScheduleMetadata;
+}
+
+const TitleAndScheduleBox = (props: Props) => {
   return (
     <TitleAndScheduleBoxStyle>
-      <ShowTitle />
+      <ShowTitle targetSchedule={props.targetSchedule} />
       <ShowDate />
     </TitleAndScheduleBoxStyle>
   );
@@ -141,9 +163,9 @@ const TitleAndScheduleBoxStyle = styled.div`
   justify-content: center;
 `;
 
-const ShowTitle = () => {
+const ShowTitle = (props: Props) => {
   // {testADay.schedules[0].title}を表示したい
-  return <ShowTitleStyle>{testADay.schedules[0].title}</ShowTitleStyle>;
+  return <ShowTitleStyle>{props.targetSchedule.title}</ShowTitleStyle>;
 };
 const ShowTitleStyle = styled.div`
   height: 40%;
@@ -166,11 +188,11 @@ const ShowDateStyle = styled.div`
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;
 
-const BottomSection = () => {
+const BottomSection = (props: Props) => {
   return (
     <BottomSectionStyle>
-      <ShowPlace />
-      <ShowDescription />
+      <ShowPlace targetSchedule={props.targetSchedule} />
+      <ShowDescription targetSchedule={props.targetSchedule} />
     </BottomSectionStyle>
   );
 };
@@ -178,7 +200,7 @@ const BottomSectionStyle = styled.div`
   height: 40%;
   width: 100%;
 `;
-const ShowPlace = () => {
+const ShowPlace = (props: Props) => {
   return (
     <ShowPlaceAndDescriptionStyle>
       <LeftSideIconsOutlineStyle>
@@ -186,7 +208,7 @@ const ShowPlace = () => {
           <RoomIcon />
         </IconsStyle>
       </LeftSideIconsOutlineStyle>
-      <ShowPlaceText />
+      <ShowPlaceText targetSchedule={props.targetSchedule} />
     </ShowPlaceAndDescriptionStyle>
   );
 };
@@ -196,10 +218,10 @@ const ShowPlaceAndDescriptionStyle = styled.div`
   align-items: center;
 `;
 
-const ShowPlaceText = () => {
+const ShowPlaceText = (props: Props) => {
   return (
     <PlaceTextAndDescriptionTextStyle>
-      {testADay.schedules[0].place}
+      {props.targetSchedule.place}
     </PlaceTextAndDescriptionTextStyle>
   );
 };
@@ -230,7 +252,7 @@ const PlaceTextAndDescriptionTextStyle = styled.div`
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;
 
-const ShowDescription = () => {
+const ShowDescription = (props: Props) => {
   return (
     <ShowPlaceAndDescriptionStyle>
       <LeftSideIconsOutlineStyle>
@@ -238,15 +260,15 @@ const ShowDescription = () => {
           <NotesIcon />
         </IconsStyle>
       </LeftSideIconsOutlineStyle>
-      <ShowDescriptionText />
+      <ShowDescriptionText targetSchedule={props.targetSchedule} />
     </ShowPlaceAndDescriptionStyle>
   );
 };
 
-const ShowDescriptionText = () => {
+const ShowDescriptionText = (props: Props) => {
   return (
     <PlaceTextAndDescriptionTextStyle>
-      {testADay.schedules[0].description}
+      {props.targetSchedule.description}
     </PlaceTextAndDescriptionTextStyle>
   );
 };
