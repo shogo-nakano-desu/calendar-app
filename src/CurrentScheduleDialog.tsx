@@ -9,6 +9,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import { ScheduleMetadata } from "./Calendar";
+import { getDate } from "date-fns/esm";
 
 //-----------------渡されるテストデータ
 interface TestScheduleMetadata {
@@ -74,6 +75,7 @@ interface Props4CurrentScheduleDialog {
   openSchedule: boolean;
   handleCloseSchedule: () => void;
   targetSchedule: ScheduleMetadata;
+  targetDate: Date;
 }
 
 // この中に部品を並べていく。最終的にレンダーするのはこのコンポーネント
@@ -96,7 +98,10 @@ export const CurrentScheduleDialog = (props: Props4CurrentScheduleDialog) => {
     >
       <MainBoardStyle>
         <TopSection handleCloseSchedule={props.handleCloseSchedule} />
-        <MiddleSection targetSchedule={props.targetSchedule} />
+        <MiddleSection
+          targetSchedule={props.targetSchedule}
+          targetDate={props.targetDate}
+        />
         <BottomSection targetSchedule={props.targetSchedule} />
       </MainBoardStyle>
     </Dialog>
@@ -134,14 +139,20 @@ const TopSectionStyle = styled.div`
 `;
 
 // CloseAddScheduleDialogはそのままボタンとして使う
-
+interface Props4MiddleSection {
+  targetSchedule: ScheduleMetadata;
+  targetDate: Date;
+}
 // 色の四角、タイトル、日付を入れる
-const MiddleSection = (props: Props) => {
+const MiddleSection = (props: Props4MiddleSection) => {
   return (
     <ShowSectionStyle>
       <ColorBox></ColorBox>
       <TitleAndScheduleBoxStyle>
-        <TitleAndScheduleBox targetSchedule={props.targetSchedule} />
+        <TitleAndScheduleBox
+          targetSchedule={props.targetSchedule}
+          targetDate={props.targetDate}
+        />
       </TitleAndScheduleBoxStyle>
     </ShowSectionStyle>
   );
@@ -176,11 +187,15 @@ interface Props {
   targetSchedule: ScheduleMetadata;
 }
 
-const TitleAndScheduleBox = (props: Props) => {
+interface Props4TitleAndScheduleBox {
+  targetSchedule: ScheduleMetadata;
+  targetDate: Date;
+}
+const TitleAndScheduleBox = (props: Props4TitleAndScheduleBox) => {
   return (
     <TitleAndScheduleBoxStyle>
       <ShowTitle targetSchedule={props.targetSchedule} />
-      <ShowDate />
+      <ShowDate targetDate={props.targetDate} />
     </TitleAndScheduleBoxStyle>
   );
 };
@@ -204,10 +219,15 @@ const ShowTitleStyle = styled.div`
   font-size: 26px;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `;
-const ShowDate = () => {
+
+interface Props4ShowDate {
+  targetDate: Date;
+}
+const ShowDate = (props: Props4ShowDate) => {
   return (
     <ShowDateStyle>
-      {getYear(testADay.date)}年{getMonth(testADay.date) + 1}月
+      {getYear(props.targetDate)}年{getMonth(props.targetDate) + 1}月
+      {getDate(props.targetDate)}
     </ShowDateStyle>
   );
 };
