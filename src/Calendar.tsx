@@ -1,22 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import add from "date-fns/add";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
-import getDaysInMonth from "date-fns/getDaysInMonth";
-import toDate from "date-fns/toDate";
 import getWeeksInMonth from "date-fns/getWeeksInMonth";
 import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import getDate from "date-fns/getDate";
 import getDay from "date-fns/getDay";
-import parseISO from "date-fns/parseISO";
 import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Dialog from "@material-ui/core/Dialog";
 import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
-import { getISODay } from "date-fns/esm";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
@@ -173,31 +168,6 @@ export const Schedules = (props: Props4Schedule) => {
               <ScheduleExistBoxStyle
                 id={`${day.date}`}
                 key={`${day.date}`}
-                data-clickeddate={() => {
-                  if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
-                    return `${getYear(day.date)}-${
-                      getMonth(day.date) + 1
-                    }-${getDay(day.date)}T11:11:11`;
-                  } else if (
-                    getMonth(day.date) + 1 < 10 &&
-                    getDay(day.date) >= 10
-                  ) {
-                    return `${getYear(day.date)}-0${
-                      getMonth(day.date) + 1
-                    }-${getDay(day.date)}T11:11:11`;
-                  } else if (
-                    getMonth(day.date) + 1 >= 10 &&
-                    getDay(day.date) < 10
-                  ) {
-                    return `${getYear(day.date)}-${
-                      getMonth(day.date) + 1
-                    }-0${getDay(day.date)}T11:11:11`;
-                  } else {
-                    return `${getYear(day.date)}-0${
-                      getMonth(day.date) + 1
-                    }-0${getDay(day.date)}T11:11:11`;
-                  }
-                }}
                 onClick={(e: any) => {
                   props.getClickedDate(e);
                   props.handleClickOpen();
@@ -216,32 +186,6 @@ export const Schedules = (props: Props4Schedule) => {
               <li
                 id={`${day.date}`}
                 key={`${day.date}`}
-                data-clickeddate={() => {
-                  console.log("data-clickedDate動いている");
-                  if (getMonth(day.date) + 1 >= 10 && getDay(day.date) >= 10) {
-                    return `${getYear(day.date)}-${
-                      getMonth(day.date) + 1
-                    }-${getDay(day.date)}T11:11:11`;
-                  } else if (
-                    getMonth(day.date) + 1 < 10 &&
-                    getDay(day.date) >= 10
-                  ) {
-                    return `${getYear(day.date)}-0${
-                      getMonth(day.date) + 1
-                    }-${getDay(day.date)}T11:11:11`;
-                  } else if (
-                    getMonth(day.date) + 1 >= 10 &&
-                    getDay(day.date) < 10
-                  ) {
-                    return `${getYear(day.date)}-${
-                      getMonth(day.date) + 1
-                    }-0${getDay(day.date)}T11:11:11`;
-                  } else {
-                    return `${getYear(day.date)}-0${
-                      getMonth(day.date) + 1
-                    }-0${getDay(day.date)}T11:11:11`;
-                  }
-                }}
                 onClick={(e: any) => {
                   props.getClickedDate(e);
                   props.handleClickOpen();

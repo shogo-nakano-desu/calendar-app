@@ -1,12 +1,7 @@
-// やりたいこと
-// 1. コード全体が汚いので綺麗にする。特に、cssが外部ファイルで残っているのを消したい
-// 2. 入力フォームにもmaterial - uiがあるはずなので適用する
-
-import React, { useState } from "react";
+import React from "react";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import getDate from "date-fns/getDate";
-import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PlaceIcon from "@material-ui/icons/Place";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -16,27 +11,6 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Dialog from "@material-ui/core/Dialog";
 import TextField from "@material-ui/core/TextField";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { flex, maxHeight, maxWidth } from "styled-system";
-import { max } from "date-fns/esm";
-import { ScheduleModel } from "./Calendar";
-import { ScheduleMetadata, Schedules } from "./Calendar";
-
-// ----------ここで渡されているデータ
-interface TestScheduleMetadata {
-  title: string;
-  place: string;
-  description: string;
-}
-interface TestScheduleModel<T = TestScheduleMetadata> {
-  date: Date;
-  schedules: Array<T>;
-}
-const testToday: Date = new Date();
-const testADay: TestScheduleModel = {
-  date: testToday,
-  schedules: [],
-};
-// ----------
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
