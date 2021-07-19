@@ -1,6 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import RoomIcon from "@material-ui/icons/Room";
 import NotesIcon from "@material-ui/icons/Notes";
@@ -10,29 +8,6 @@ import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import { ScheduleMetadata } from "./Calendar";
 import { getDate } from "date-fns/esm";
-
-//-----------------渡されるテストデータ
-interface TestScheduleMetadata {
-  title: string;
-  place: string;
-  description: string;
-}
-interface TestScheduleModel<T = TestScheduleMetadata> {
-  date: Date;
-  schedules: Array<T>;
-}
-const testToday: Date = new Date();
-const testADay: TestScheduleModel = {
-  date: testToday,
-  schedules: [
-    {
-      title: "テスト用の予定だよ",
-      place: "家",
-      description: "映画見てジム",
-    },
-  ],
-};
-//-----------------
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -120,7 +95,6 @@ interface Props4TopSection {
 const TopSection = (props: Props4TopSection) => {
   return (
     <TopSectionStyle>
-      {/* <DeleteOutlined style={{ margin: "5px", fontSize: "30px" }} /> */}
       <HighlightOffIcon
         style={{ margin: "5px", fontSize: "30px" }}
         type="button"
@@ -209,7 +183,6 @@ const TitleAndScheduleBoxStyle = styled.div`
 `;
 
 const ShowTitle = (props: Props) => {
-  // {testADay.schedules[0].title}を表示したい
   return <ShowTitleStyle>{props.targetSchedule.title}</ShowTitleStyle>;
 };
 const ShowTitleStyle = styled.div`
