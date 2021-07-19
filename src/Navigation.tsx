@@ -7,9 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import getYear from "date-fns/getYear";
-import getMonth from "date-fns/getMonth";
-import React, { useState } from "react";
+import React from "react";
 
 interface Props {
   targetYear: number;

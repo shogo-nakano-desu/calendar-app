@@ -14,7 +14,6 @@ import { Navigation } from "./Navigation";
 import { AddScheduleDialog } from "./AddScheduleDialog";
 import "./Calendar.css";
 import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
-import { textAlign } from "styled-system";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
@@ -29,15 +28,6 @@ export interface ScheduleModel<T = ScheduleMetadata> {
 
 type WeeksArrayModel = ScheduleModel[];
 
-// ↑ユーザー操作実装後は不要になるコードーーーーーーーーーーーーーーーーーーーーーーーーーーー
-// ↓そのまま残すコード
-// - CalendarApp
-// | - CalendarAppStyle
-//     | - Navigation
-//     | - CalendarBoard
-//       | - BorderStyle
-//       | - CalendarGridStyle
-//         | - Schedules
 interface Props4CalendarBoard {
   targetYear: number;
   targetMonth: number;
@@ -252,25 +242,6 @@ const CalendarAppStyle = styled.div`
   background-color: rgb(255, 255, 255);
 `;
 
-// const SpaceStyle = styled.div`
-//   height: 10px;
-//   width: 100%;
-//   background-color: black;
-// `;
-
-// スタイルだけ使いまわせそうだから、最後に見た目を整えるときに使う
-// const Day2ButtonStyle = styled.div`
-//   background-color: rgb(255, 255, 255);
-//   padding: 5px;
-//   display: flex;
-//   justify-content: center;
-//   font-size: 1rem;
-//   font-weight: 400;
-//   line-height: 1.5;
-//   letter-spacing: 0.00938em;
-//   border-color: rgb(255, 255, 255);
-// `;
-
 export const CalendarApp = () => {
   const today = new Date();
   const [targetYear, setTargetYear] = useState(getYear(today));
@@ -443,61 +414,6 @@ export const CalendarApp = () => {
     const Num2Date = new Date(year(), month() - 1, day());
     setTargetDate(Num2Date);
   };
-
-  // const getCurrentScheduleDate = (e: any) => {
-  //   const childID = getID(e);
-  //   const parentID = document.getElementById(childID)!.parentElement!.id;
-  //   console.log(parentID);
-  //   const stringDateYear = parentID.match(/(?<=^.{11}).{4}/);
-  //   const year = () => {
-  //     if (stringDateYear === null) {
-  //       return 0;
-  //     } else {
-  //       return parseInt(stringDateYear[0]);
-  //     }
-  //   };
-  //   const stringDateMonth = parentID.match(/(?<=^.{4}).{3}/);
-  //   const month = () => {
-  //     if (stringDateMonth === null) {
-  //       return 0;
-  //     } else if (stringDateMonth[0] === "Jan") {
-  //       return 1;
-  //     } else if (stringDateMonth[0] === "Feb") {
-  //       return 2;
-  //     } else if (stringDateMonth[0] === "Mar") {
-  //       return 3;
-  //     } else if (stringDateMonth[0] === "Apr") {
-  //       return 4;
-  //     } else if (stringDateMonth[0] === "May") {
-  //       return 5;
-  //     } else if (stringDateMonth[0] === "Jun") {
-  //       return 6;
-  //     } else if (stringDateMonth[0] === "Jul") {
-  //       return 7;
-  //     } else if (stringDateMonth[0] === "Aug") {
-  //       return 8;
-  //     } else if (stringDateMonth[0] === "Sep") {
-  //       return 9;
-  //     } else if (stringDateMonth[0] === "Oct") {
-  //       return 10;
-  //     } else if (stringDateMonth[0] === "Nov") {
-  //       return 11;
-  //     } else {
-  //       return 12;
-  //     }
-  //   };
-
-  //   const stringDateDay = parentID.match(/(?<=^.{8}).{2}/);
-  //   const day = () => {
-  //     if (stringDateDay === null) {
-  //       return 0;
-  //     } else {
-  //       return parseInt(stringDateDay[0]);
-  //     }
-  //   };
-  //   const Num2Date = new Date(year(), month() - 1, day());
-  //   setTargetDate(Num2Date);
-  // };
 
   // すでに存在するスケジュールの予定を獲得するための関数
   const getCurrentSchedule = (e: any) => {

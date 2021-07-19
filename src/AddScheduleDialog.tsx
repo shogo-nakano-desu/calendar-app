@@ -66,8 +66,6 @@ const AddTitleForm = (props: Props4AddTitleForm) => {
         value={props.titleForm}
         onChange={props.titleHandleChange}
         placeholder=" タイトルを追加"
-        // className="MuiInputBase-input MuiInput-input"
-        // valueはinput のstateを管理するようになった時に表示させるようにする
       />
     </form>
   );
@@ -212,14 +210,6 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
         alignItems: "center",
         justifyContent: "center",
       }}
-      // style={{
-      //   height: "100%",
-      //   display: "flex",
-      //   justifyContent: "center",
-      //   alignItems: "center",
-      //   backgroundColor: "rgba(128, 128, 128, 0.5)",
-      //   padding: 0,
-      // }}
     >
       <CloseIconSet>
         <HighlightOffIcon type="button" onClick={props.handleClose} />
@@ -248,19 +238,13 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
         clearFormState={props.clearFormState}
       />
     </Dialog>
-    // </Position>
   );
 };
-
-const Position = styled.div`
-  display: flex;
-  align-items: center;
-`;
 
 const CloseIconSet = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 10px;　
+  margin: 10px;
   height: 15%;
 `;
 
