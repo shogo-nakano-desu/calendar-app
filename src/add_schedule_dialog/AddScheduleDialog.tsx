@@ -142,7 +142,7 @@ const AddDescriptionForm = (props: Props4AddDescriptionForm) => {
   );
 };
 
-interface Props4SaveButton {
+export interface Props4SaveButton {
   titleForm: string;
   placeForm: string;
   descriptionForm: string;
@@ -151,7 +151,7 @@ interface Props4SaveButton {
   clearFormState: () => void;
 }
 
-const SaveButton = (props: Props4SaveButton) => {
+export const SaveButton = (props: Props4SaveButton) => {
   return (
     <SaveButtonStyle>
       <Button
@@ -169,18 +169,10 @@ const SaveButton = (props: Props4SaveButton) => {
   );
 };
 
-const SaveButtonStyle = styled.div`
-  display: flex;
-  height: 15%;
-  justify-content: flex-end;
-  margin: 5px;
-`;
-
-interface Props4AddScheduleDialog {
+export interface Props4AddScheduleDialog {
   open: boolean;
   handleClose: () => void;
   targetDate: Date;
-  firstDayOfWeeksArray: Date;
   titleForm: string;
   placeForm: string;
   descriptionForm: string;
@@ -195,7 +187,6 @@ export const AddScheduleDialog = (props: Props4AddScheduleDialog) => {
   const classes = useStyles();
 
   return (
-    // <Position>
     <Dialog
       classes={{
         container: classes.container,
@@ -247,12 +238,11 @@ const CloseIconSet = styled.div`
   margin: 10px;
   height: 15%;
 `;
-
-const TitleSet = styled.div`
+const FormStyle = styled.div`
+  margin: 0px 20px 0px 10px;
+  width: 100%;
   display: flex;
-  margin: 0px 10px 10px 10px;
-  height: 25%;
-  align-items: flex-start;
+  justify-content: center;
 `;
 
 const IconAndForm = styled.div`
@@ -266,9 +256,16 @@ const IconStyle = styled.div`
   align-items: center;
 `;
 
-const FormStyle = styled.div`
-  margin: 0px 20px 0px 10px;
-  width: 100%;
+const SaveButtonStyle = styled.div`
   display: flex;
-  justify-content: center;
+  height: 15%;
+  justify-content: flex-end;
+  margin: 5px;
+`;
+
+const TitleSet = styled.div`
+  display: flex;
+  margin: 0px 10px 10px 10px;
+  height: 25%;
+  align-items: flex-start;
 `;
