@@ -11,7 +11,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import "@fontsource/roboto";
 import { Navigation } from "./Navigation";
-import { AddScheduleDialog } from "./AddScheduleDialog";
+import { AddScheduleDialog } from "./add_schedule_dialog/AddScheduleDialog";
 import "./Calendar.css";
 import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
 
@@ -467,7 +467,6 @@ export const CalendarApp = () => {
         open={open}
         handleClose={handleClose}
         targetDate={targetDate}
-        firstDayOfWeeksArray={firstDayOfWeeksArray}
         titleForm={titleForm}
         placeForm={placeForm}
         descriptionForm={descriptionForm}
