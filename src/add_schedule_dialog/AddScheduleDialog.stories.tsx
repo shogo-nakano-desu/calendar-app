@@ -8,6 +8,10 @@ import {
 export default {
   title: "AddScheduleDialog",
   component: AddScheduleDialog,
+  args: {
+    open: true,
+    targetDate: new Date(),
+  },
 } as ComponentMeta<typeof AddScheduleDialog>;
 
 export const Template: ComponentStory<typeof AddScheduleDialog> = (
