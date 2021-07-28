@@ -6,7 +6,7 @@ import Dialog from "@material-ui/core/Dialog";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
-import { ScheduleMetadata } from "./Calendar";
+import { ScheduleMetadata } from "../Calendar/Calendar";
 import { getDate } from "date-fns/esm";
 
 const useStyles = makeStyles((theme: Theme) =>
