@@ -1,5 +1,4 @@
-import React from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { Story, Meta } from "@storybook/react";
 import {
   AddScheduleDialog,
   Props4AddScheduleDialog,
@@ -12,22 +11,28 @@ export default {
     open: true,
     targetDate: new Date(),
   },
-} as ComponentMeta<typeof AddScheduleDialog>;
+} as Meta;
 
-export const Template: ComponentStory<typeof AddScheduleDialog> = (
-  props: Props4AddScheduleDialog
-) => (
-  <AddScheduleDialog
-    open={props.open}
-    handleClose={props.handleClose}
-    targetDate={props.targetDate}
-    titleForm={props.titleForm}
-    placeForm={props.placeForm}
-    descriptionForm={props.descriptionForm}
-    handleSave={props.handleSave}
-    titleHandleChange={props.titleHandleChange}
-    placeHandleChange={props.placeHandleChange}
-    descriptionHandleChange={props.descriptionHandleChange}
-    clearFormState={props.clearFormState}
-  />
+export const Template: Story<Props4AddScheduleDialog> = (args) => (
+  <AddScheduleDialog {...args} />
 );
+
+// 複数種類作っていきたい時にはPrimaryのコードを変更していけばよい
+// export const Primary = Template.bind({});
+// Primary.args = {};
+
+// (props: Props4AddScheduleDialog) => (
+//   <AddScheduleDialog
+//     open={true}
+//     handleClose={props.handleClose}
+//     targetDate={props.targetDate}
+//     titleForm={props.titleForm}
+//     placeForm={props.placeForm}
+//     descriptionForm={props.descriptionForm}
+//     handleSave={props.handleSave}
+//     titleHandleChange={props.titleHandleChange}
+//     placeHandleChange={props.placeHandleChange}
+//     descriptionHandleChange={props.descriptionHandleChange}
+//     clearFormState={props.clearFormState}
+//   />
+// );

@@ -9,14 +9,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
 
-interface Props {
+export interface Props4Navigation {
   targetYear: number;
   targetMonth: number;
   setTargetYear: React.Dispatch<React.SetStateAction<number>>;
   setTargetMonth: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const Navigation = (props: Props) => {
+export const Navigation = (props: Props4Navigation) => {
   const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {

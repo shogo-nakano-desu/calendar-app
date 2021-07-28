@@ -10,10 +10,10 @@ import styled from "styled-components";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import "@fontsource/roboto";
-import { Navigation } from "./Navigation";
-import { AddScheduleDialog } from "./add_schedule_dialog/AddScheduleDialog";
+import { Navigation } from "../Navigation/Navigation";
+import { AddScheduleDialog } from "../add_schedule_dialog/AddScheduleDialog";
 import "./Calendar.css";
-import { CurrentScheduleDialog } from "./CurrentScheduleDialog";
+import { CurrentScheduleDialog } from "../CurrentScheduleDialog/CurrentScheduleDialog";
 
 // 予定の持たせ方の型定義
 export interface ScheduleMetadata {
