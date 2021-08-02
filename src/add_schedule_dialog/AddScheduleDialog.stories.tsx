@@ -31,6 +31,8 @@ LongTitle.args = {
     "サッカー練習試合。相手は食べチョクさんなので遅刻厳禁でお願いします！他に、ユーザベースさんとPOLさんもきます！",
 };
 
+export const Empty = Template.bind({});
+
 // 複数種類作っていきたい時にはPrimaryのコードを変更していけばよい
 // export const Primary = Template.bind({});
 // Primary.args = {};
