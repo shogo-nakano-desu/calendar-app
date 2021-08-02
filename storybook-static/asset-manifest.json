@@ -1,0 +1,35 @@
+{
+  "files": {
+    "0.7712c4c4.iframe.bundle.js": "./0.7712c4c4.iframe.bundle.js",
+    "main.css": "./static/css/main.0b660ce0.chunk.css",
+    "main.js": "./main.88c66c77.iframe.bundle.js",
+    "main.css.map": "./static/css/main.0b660ce0.chunk.css.map",
+    "runtime~main.js": "./runtime~main.4831cf60.iframe.bundle.js",
+    "vendors~main.js": "./vendors~main.b7c84560.iframe.bundle.js",
+    "vendors~main.js.map": "./vendors~main.b7c84560.iframe.bundle.js.map",
+    "4.9610afd3.iframe.bundle.js": "./4.9610afd3.iframe.bundle.js",
+    "4.9610afd3.iframe.bundle.js.map": "./4.9610afd3.iframe.bundle.js.map",
+    "5.10bca545.iframe.bundle.js": "./5.10bca545.iframe.bundle.js",
+    "6.3ea0e66d.iframe.bundle.js": "./6.3ea0e66d.iframe.bundle.js",
+    "6.3ea0e66d.iframe.bundle.js.map": "./6.3ea0e66d.iframe.bundle.js.map",
+    "7.437841d7.iframe.bundle.js": "./7.437841d7.iframe.bundle.js",
+    "4.9610afd3.iframe.bundle.js.LICENSE.txt": "./4.9610afd3.iframe.bundle.js.LICENSE.txt",
+    "6.3ea0e66d.iframe.bundle.js.LICENSE.txt": "./6.3ea0e66d.iframe.bundle.js.LICENSE.txt",
+    "iframe.html": "./iframe.html",
+    "static/media/code-brackets.2e1112d7.svg": "./static/media/code-brackets.2e1112d7.svg",
+    "static/media/colors.a4bd0486.svg": "./static/media/colors.a4bd0486.svg",
+    "static/media/comments.a3859089.svg": "./static/media/comments.a3859089.svg",
+    "static/media/direction.b770f9af.svg": "./static/media/direction.b770f9af.svg",
+    "static/media/flow.edad2ac1.svg": "./static/media/flow.edad2ac1.svg",
+    "static/media/plugin.d494b228.svg": "./static/media/plugin.d494b228.svg",
+    "static/media/repo.6d496322.svg": "./static/media/repo.6d496322.svg",
+    "static/media/stackalt.dba9fbb3.svg": "./static/media/stackalt.dba9fbb3.svg",
+    "vendors~main.b7c84560.iframe.bundle.js.LICENSE.txt": "./vendors~main.b7c84560.iframe.bundle.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "runtime~main.4831cf60.iframe.bundle.js",
+    "vendors~main.b7c84560.iframe.bundle.js",
+    "static/css/main.0b660ce0.chunk.css",
+    "main.88c66c77.iframe.bundle.js"
+  ]
+}

@@ -36,6 +36,24 @@ export const Navigation = (props: Props4Navigation) => {
     })
   );
   const classes = useStyles();
+  const putMonthBack = () => {
+    if (props.targetMonth === 1) {
+      props.setTargetMonth(12);
+      props.setTargetYear(props.targetYear - 1);
+    } else {
+      props.setTargetMonth(props.targetMonth - 1);
+    }
+  };
+
+  const putMonthForward = () => {
+    if (props.targetMonth === 12) {
+      props.setTargetMonth(1);
+      props.setTargetYear(props.targetYear + 1);
+    } else {
+      props.setTargetMonth(props.targetMonth + 1);
+    }
+  };
+
   return (
     <AppBar position="static" className={classes.root}>
       <Toolbar className={classes.bar}>
@@ -60,16 +78,7 @@ export const Navigation = (props: Props4Navigation) => {
           aria-controls="simple-menu"
           aria-haspopup="true"
         >
-          <ArrowBackIosIcon
-            onClick={() => {
-              if (props.targetMonth === 1) {
-                props.setTargetMonth(12);
-                props.setTargetYear(props.targetYear - 1);
-              } else {
-                props.setTargetMonth(props.targetMonth - 1);
-              }
-            }}
-          />
+          <ArrowBackIosIcon onClick={() => putMonthBack()} />
         </IconButton>
         <IconButton
           edge="start"
@@ -78,16 +87,7 @@ export const Navigation = (props: Props4Navigation) => {
           aria-controls="simple-menu"
           aria-haspopup="true"
         >
-          <ArrowForwardIosIcon
-            onClick={() => {
-              if (props.targetMonth === 12) {
-                props.setTargetMonth(1);
-                props.setTargetYear(props.targetYear + 1);
-              } else {
-                props.setTargetMonth(props.targetMonth + 1);
-              }
-            }}
-          />
+          <ArrowForwardIosIcon onClick={() => putMonthForward()} />
         </IconButton>
         <Typography variant="h6" className={classes.title}>
           {props.targetYear}年{props.targetMonth}月
