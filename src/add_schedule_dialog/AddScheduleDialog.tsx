@@ -56,6 +56,7 @@ interface Props4AddTitleForm {
 
 const AddTitleForm = (props: Props4AddTitleForm) => {
   const classes = useStyles();
+  console.log(process.cwd());
   return (
     <form className={classes.titleForm} noValidate autoComplete="off">
       <TextField
